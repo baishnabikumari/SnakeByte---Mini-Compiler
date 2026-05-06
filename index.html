@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SnakeByte - Full Python Compiler</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="bootSplash" class="boot-splash">
+        <div class="boot-content">
+            <div class="boot-snake">🐍</div>
+            <div class="boot-brand">Snake<span>Byte</span></div>
+            <div class="boot-sub">Booting the CPython in your own Browser...</div>
+            <div class="boot-bar-wrap">
+                <div class="boot-bar" id="bootBar"></div>
+            </div>
+            <div class="boot-stage" id="bootStage">Loading Pyodide Runtime...</div>
+        </div>
+    </div>
+
+    <div class="noise-overlay"></div>
+    <div class="app-shell" id="appShell" style="display: none;">
+        
+    </div>
+</body>
+</html>
