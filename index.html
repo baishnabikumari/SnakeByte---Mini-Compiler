@@ -13,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/pyodide/v0.25.1/full/pyodide.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div id="bootSplash" class="boot-splash">
         <div class="boot-content">
@@ -28,7 +29,56 @@
 
     <div class="noise-overlay"></div>
     <div class="app-shell" id="appShell" style="display: none;">
-        
+        <!--TopBar-->
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">
+                    <span>🐍</span>
+                    <div class="brand-glow"></div>
+                </div>
+                <div class="brand-text">
+                    <h1><span class="brand-accent">Snake</span></h1>
+                    <p>Full CPython 3.11 ⚬ Pyodide ⚬ WebAssembly</p>
+                </div>
+            </div>
+
+            <div class="topbar-center">
+                <div class="pill-select-wrap">
+                    <span class="select-label">Examples</span>
+                    <div class="custom-select-box">
+                        <select id="exampleSelect">
+                            <option value="hello">👋 Hello World</option>
+                            <option value="math">🔢 Math &amp; Builtins</option>
+                            <option value="listcomp">📋 List Comprehension</option>
+                            <option value="classes">🏗 Classes &amp; OOP</option>
+                            <option value="generators">⚡ Generators</option>
+                            <option value="decorators">🎨 Decorators</option>
+                            <option value="regex">🔍 Regex</option>
+                            <option value="json">📦 JSON &amp; Dict</option>
+                            <option value="exceptions">🛡 Exceptions</option>
+                            <option value="fibonacci">🌀 Fibonacci</option>
+                            <option value="numpy">🔬 NumPy (Auto-installed)</option>
+                            <option value="matplotlib">📊 Matplotlib (Auto-installed)</option>
+                        </select>
+                        <span class="select-arrow">▾</span>
+                    </div>
+                </div>
+            </div>
+            <div class="topbar-actions">
+                <button id="loadExampleBtn" class="btn btn-ghost"><span>📁</span> Load</button>
+                <button id="runBtn" class="btn btn-primary" disabled>
+                    <span class="run-circle">▶</span> Run Code
+                </button>
+                <button id="clearBtn" class="btn btn-outline"><span></span> Clear</button>
+                <button id="resetBtn" class="btn btn-outline" title="Reset Python environment">↺ Reset</button>
+
+                <!--Toggle-->
+                <label class="theme-toggle">
+                    <input
+                </label>
+            </div>
+        </header>
     </div>
 </body>
+
 </html>
