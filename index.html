@@ -74,11 +74,114 @@
 
                 <!--Toggle-->
                 <label class="theme-toggle">
-                    <input
+                    <input type="checkbox" id="themeCheck" />
+                    <div class="toggle-track">
+                        <div class="toggle-indicator">
+                            <div class="toggle-knob">
+
+                                <span class="knob-icon-moon">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 a7 7 0 0 0 9.79 9.79z" />
+                                    </svg>
+                                </span>
+                                <span class="knob-icon-sun">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="5" />
+                                        <line x1="12" y1="1" x2="12" y2="3" />
+                                        <line x1="12" y1="21" x2="12" y2="23" />
+                                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                                        <line x1="1" y1="12" x2="3" y2="12" />
+                                        <line x1="21" y1="12" x2="23" y2="12" />
+                                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </label>
             </div>
         </header>
+
+        <!--pkg bar-->
+        <div class="pkg-bar">
+            <span class="pkg-label">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right:6px">
+                    <path d="M2 12 L8 15 L14 12 L14 4 L8 1 L2 4 Z" />
+                    <path d="M2 4 L8 7 L14 4" />
+                    <line x1="8" y1="7" x2="8" y2="15"/>
+                    <path d="M5 2.5 L11 5.5"
+                </svg>pip install
+            </span>
+            <input id="pkgInput" class="pkg-input" type="text" placeholder="numpy, pandas, requests..." spellcheck="false" />
+            <button id="pkgBtn" class="btn btn-ghost btn-sm">Install</button>
+            <span id="pkgStatus" class="pkg-status"></span>
+            <div class="pkg-chips" id="pkgChips"></div>
+        </div>
+        <main class="workspace">
+
+            <!--Editor-->
+            <section class="panel editor-panel">
+                <div class="panel-hand">
+                    <div class="panel-title-row">
+                        <div class="panel-dot dot-red"></div>
+                        <div class="panel-dot dot-yellow"></div>
+                        <div class="panel-dot dot-green"></div>
+                        <span class="panel-title">main.py</span>
+                    </div>
+                    <div class="hint-badge">
+                        <span class="hint-key">⇧</span><span class="hint-key">↵</span>
+                        <span class="hint-label">to run</span>
+                    </div>
+                </div>
+                <div class="editor-wrap">
+                    <div id="lineNumbers" class="line-numbers" aria-hidden="true"></div>
+                    <textarea id="editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+                </div>
+                <div class="statusbar">
+                    <span id="statusDot" class="status-dot"></span>
+                    <span id="statusText" class="status-text">Initialising...</span>
+                    <span class="statusbar-spacer"></span>
+                    <span id="execTime" class="status-lang" style="display:none;"></span>
+                    <span class="status-lang">CPython 3.11 ⚬ WASM</span>
+                </div>
+            </section>
+
+            <!--Output-->
+            <section class="panel output-panel">
+                <div class="tabs" role="tablist">
+                    <button class="tab active" data-tab="output">▶ Output</button>
+                    <button class="tab" data-tab="errors">⚠ Errors</button>
+                    <button class="tab" data-tab="vars">🔭 Variables</button>
+                    <button class="tab" data-tab="plot">📊 Plot</button>
+                </div>
+                <div class="tab-panels">
+                    <div id="outputPanel" class="tab-panel active">
+                        <pre id="outputPanel" class="tab-panel active"></pre>
+                    </div>
+                    <div id="errorsPanel" class="tab-panel">
+                        <pre id="errorBox" class="code-box error-box"></pre>
+                    </div>
+                    <div id="varsPanel" class="tab-panel">
+                        <div id="varBox" class="vars-box"></div>
+                    </div>
+                    <div id="plotPanel" class="tab-panel">
+                        <div id="plotBox" class="plot-box">
+                            <div class="plot-empty">Run Matplotlib code to see the plots here 📊</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="footer">
+            <p>🐍 <strong>SnakeByte</strong> - Full CPython 3.11 running via <a href="https://pyodide.org" target="_blank" rel="noopener">Pyodide</a> + WebAssembly. No Server. Everything runs in <em>your</em>browser.</p>
+        </footer>
     </div>
+    
+    <script src="script.js"></script>
 </body>
 
 </html>
