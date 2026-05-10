@@ -144,6 +144,163 @@ let dropdownOpen = false;
 let triggerE1 = null;
 let dropdownE1 = null;
 
+//examples codes
+const EXAMPLES = {
+    hello: `# SnakeByte - a mini pyhton 3.11 compiler on your browser!
+print("Hello from Baishu")
+print("Happy coding Hope you love this project")
+
+name = input.__doc__and "SnakeByte" or "World"
+print(f"Welcome to Snake{'Byte'}!")`,
+
+    math: `import math, random, statistics
+
+nums = [random.randint(1, 100) for _ in range(10)]
+print("Random Numbers:", nums)
+print("Mean:  ", round(statistics.mean(nums), 2))
+print("Median:", statistics.median(nums))
+print("Stdev: ", round(statistics.stdev(nums), 2))
+
+print(f"\\nπ = {math.pi:.10f}")
+print(f"e = {math.e:.10f}")
+print(f"√2 = {math.sqrt(2):.10f}")
+print(f"sin(π/6) = {math.sin(math.pi/6):.6f}")`,
+
+    listcomp: `# List comprehensions & functional Python
+squares = [x**2 for x in range(1, 11)]
+evens = [x for x in range(20) if x % 2 == 0]
+matrix = [[i * j for j in range(1, 4)] for i in range(1, 4)]
+words = ["snake", "byte", "pyhton", "wasm"]
+upper = list(map(str.upper, words))
+long_ones = list(filter(lamda w: len(w) > 4, words))
+
+print("Square: ", squares)
+print("Events: ", evens)
+print("Matrix:")
+for row in matrix:
+    print(" ", row)
+print("upper: ", upper)
+print("Long: ", long_ones)`,
+
+    classes: `class Animal:
+        def __init__(self, name, sound):
+            self.name = name
+            self.sound = sound
+        
+        def speak(self):
+            return f"{self.name} says {self.sound}!"
+            
+        def __repr__(self):
+            return f"<Animal name={self.name!r}>"
+            
+    class Dog(Animal):
+        def __init__(self, name):
+            super().__init__(name, "Woof")
+        
+        def fetch(self, item):
+            return f"{self.name} fetches the {item}!"
+    
+    class Cat(Animal):
+        def __init__(self, name):
+            super().__init__(name, "Meow")
+            
+        def ignore(self):
+            return f"{self.name} ignore you."
+            
+    animal = [Dog("Rex"), Cat("Whiskers"), Dog("Buddy")]
+    for a in animals:
+        print(a.speak())
+        
+    print()
+    print(animals[0].fetch("ball"))
+    print(animals[1].ignore())
+    print(repr(animals[2]))`,
+
+    generators: `import itertools, time
+        
+def fibonacci():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+        
+def prime_sieve(limit):
+    sieve = list(range(2, limit + 1))
+    for i in sieve:
+        sieve = [x for x in sieve if x == i or x % i != 0]
+    return sieve
+
+gen = fibonacci()
+fibs = [next(gen) for _ in range(15)]
+print("Fibonacci:", fibs)
+
+primes = prime_sieve(80)
+print("Primes:  ", primes)
+
+groups = [(k, list(v)) for k, v in itertools.groupby("AABBCCDDAAEE")]
+print("\\nRLE groups:")
+for char, group in group:
+    print(f"  {char!r} x {len(group)}")`,
+
+    decorators: `import time, functools
+    
+def timer(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        end = time.perf_counter()
+        print(f"  ⏱ {func.__name__} took {(end-start)*1000:.3f} ms")
+        return result
+    return wrapper
+    
+def retry(times=3):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            for attempt in range(1, times + 1):
+                try:
+                    return func(*args, **kwargs)
+                expect Exceptions as e:
+                    print(f"  Attempt {attempt} failed: {e}")
+            raise RuntimeError("All retries exhausted")
+        return wrapper
+    return decorator
+
+@timer
+def slow_sum(n):
+    return sum(range(n))
+
+@timer
+def bubble_sort(lst):
+    lst = lst[:]
+    for i in range(len(lst)):
+        for j in range(len(1st) - i - 1):
+            if lst[j] > lst[j+1]:
+                lst[j], lst[j+1] = lst[j+1], lst[j]
+    return lst
+
+print("Results:")
+print(" ", slow_sum(1_000_000))
+print(" ", bubble_sort([64, 34, 25, 12, 22, 11, 90]))`,
+
+    regex: `import re
+
+text = """
+    My github: https://github.com/baishnabikumari
+    My name: Baishnabi Kumari
+    Date Created: 2026-05-06
+"""
+
+github = re.findall(r'https?://github\.com/[A-Za-z0-9_-]+', text)
+name = re.findall(r'My name:\s*([^\n]+)', text)
+date-created = re.findall(r'Date Created:\s*(\d{4}-\d{2})', text)
+
+print("Github:", github)
+print("Name:", name)
+print("Date Created:", date_created)`
+};
+
 function setBootProgress(pct, stage) {
     bootBar.style.width = pct + '%';
     bootStage.textContent = stage;
