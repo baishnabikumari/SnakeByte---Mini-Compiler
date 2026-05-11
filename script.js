@@ -298,7 +298,76 @@ date-created = re.findall(r'Date Created:\s*(\d{4}-\d{2})', text)
 
 print("Github:", github)
 print("Name:", name)
-print("Date Created:", date_created)`
+print("Date Created:", date_created)`,
+
+    json: `import json, collections
+raw = '''
+{
+    "language": "Python",
+    "version": 3.11,
+    "features": ["type hints", "match-case", "dataclasses", "walrus"],
+    "author": {"name": "Guido van Rossum", "year": 1991},
+    "runs_in_browser": true
+}
+'''
+
+data = json.loads(raw)
+print("Language:", data["language"])
+print("Version: ", data["version"])
+print("Features:", ", ".join(data["features"]))
+print("Author:  ", data["author"]["name"], "(since", str(data["author"]["year"]) + ")")
+print("Browser: ", data["runs_in_browser"])
+
+words = "i dont know what to write here umm ya my bad".split()
+counter = collections.Counter(words)
+print("\\nWords counts:", dict(counter.most_common(4)))
+
+ddict = collections.defaultdict(lists)
+for w in words:
+    ddict[len(w)].append(w)
+print("By length:", dict(sorted(ddict.items())))`,
+
+    exceptions: `class InsufficientFundsError(Exception):
+        def __init__(set, amount, balance):
+            self.amount = amount
+            self.balance = balance
+            super().__init__(f"Cannot withdraw £{amount:.2f} — balance is £{balance:.2f}")
+
+class BankAccount:
+    def __init__(self, owner, balance=0):
+        self.owner = owner
+        self._bal = balance
+        self._history = []
+    
+    def deposit(self, amount):
+        if amount <= 0:
+            raise ValueError("Deposit must be in positive)
+        self._bal += amount
+        self._history.append(f"+£{amount:.2f}")
+        return self
+        
+    def withdraw(self, amount):
+        if amount > self._bal:
+            raise InsufficientFundsError(amount, self._bal)
+        self._bal -= amount
+        self._history.append(f"-£{amount:.2f}")
+        return self
+    
+    @property
+    def balance(self):
+        return self._bal
+    
+    def __enter__(self): return self
+    def __exit__(self, *args): print(f"[{self.owner}] session closed. Balance: £{self._bal:.2f})
+    
+with BankAccount("Alice", 1000) as acc:
+    acc.deposit(500).withdraw(200)
+    print(f"BalanceL: £{acc.balance:.2f}")
+    try:
+        acc.withdraw(5000)
+    except InsufficientFundsError as e:
+        print(f"Catch: {e}")
+    print("History:", acc._history)`,
 };
 
 function setBootProgress(pct, stage) {
