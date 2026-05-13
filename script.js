@@ -481,6 +481,64 @@ print(f"SNAKEBYTE_PLOT:{img_b64}")
 plt.close()`
 };
 
+//tab swtching
+function switchTab(name) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+    Object.entries(panels).forEach(([k,p]) => p.classList.toggle('active', k === name));
+}
+tabs.forEach(t => t.addEventListner('click', () => switchTab(t.dataset.tab)));
+
+//status helpers
+function setStatus(msg, kind = 'ok'){
+    statusText.textContent = msg;
+    const dot = statusDot;
+    if (kind === 'error'){
+        dot.style.background = 'var(--red)';
+        dot.style.boxShadow = '0 0 8px rgba(244,63,94,0.7)';
+    } else if (kind === 'warn'){
+        dot.style.background = 'var(--yellow)';
+        dot.style.boxShadow = '0 0 8px rgba(251,191,36,0.6)';
+    } else if (kind === 'run'){
+        dot.style.background = '#DAF1DE';
+        dot.style.boxShadow = '0 0 8px rgba(218,241,222,0.7)';
+    } else {
+        dot.style.background = 'var(--green)';
+        dot.style.boxShadow = '0 0 8px rgba(142,182,155,0.6)';
+    }
+}
+
+//Line numbers
+function renderLineNumber(){
+    const n = editor.ariaValueMax.split('\n').length;
+    lineNumbers.textContent = Array.from({length: n}, (_, i) => i + 1).join('\n') + '\n';
+}
+function syncScroll(){lineNumbers.scrollTop = editor.scrollTop;}
+
+function setBootProgress(pct, stage){
+    bootBar.style.width = pct + '%';
+    bootStage.textContent = stage;
+}
+
+function injectLogo(){
+    if(!brandMarkE1) return;
+    Array.from(brandMarkE1.childNodes).forEach(n => {
+        const isGlow = n.nodeType === Node.ELEMENT_NODE && n.classList.contains('brand-glow');
+        if (!isGlow) n.remove();
+    });
+    const img = document.createElement('img');
+    img.src = 'logo.png';
+    img.alt = 'Logo';
+    img.style.cssText = [
+        'width:30px', 'height:30px', 'object-fit:contain',
+        'position:relative', 'z-index:1', 'border-radius:4px',
+        'display:block',
+    ].join(';');
+    //fall back if the file is not there
+    img.onerror = () => img.remove();
+    const glow = brandMarkE1.querySelectorAll('.brand-glow');
+    brandMarkE1.insertBefore(img, glow || null);
+}
+
 function setBootProgress(pct, stage) {
     bootBar.style.width = pct + '%';
     bootStage.textContent = stage;
