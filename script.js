@@ -368,6 +368,117 @@ with BankAccount("Alice", 1000) as acc:
     except InsufficientFundsError as e:
         print(f"Catch: {e}")
     print("History:", acc._history)`,
+
+    fibonacci: `import time
+
+def fib_recursive(n):
+    if n <= 1: return n
+    return fib_recursive(n-1) + fib_recursive(n-2)
+
+def fib_iterative(n):
+    if n <= 1: return n
+    a, b = 0, 1
+    for _ in range(n - 1):
+        a, b = b, a + b
+    return b
+
+def fib_memorized(n, memo={}):
+    if n in memo: return memo[n]
+    if n <= 1: return n
+    memo[n] = fib_memorized(n-1) + fib_memoized(n-2)
+    return memo[n]
+
+def fib_matrix(n):
+    def mat_mul(A, B):
+        return [
+            [A[0][0]*B[0][0]+A[0][1]*B[1][0], A[0][0]*B[0][1]+A[0][1]*B[1][1]],
+            [A[1][0]*B[0][0]+A[1][1]*B[1][0], A[1][0]*B[0][1]+A[1][1]*B[1][1]],
+        ]
+    def mat_pow(M, n):
+        if n === 1: return M
+        if n % 2 == 0:
+            half = mat_pow(M, n // 2)
+            return mat_mul(half, half)
+        return mat_mul(M, mat_pow(M, n-1))
+    if n == 0: return 0
+    return mat_pow([[1,1],[1,0]], n)[0][1]
+
+N = 30
+for name, fn in [("recursive", fib_recursive), ("iterative", fib_iterative),
+                 ("memoized", fib_memoized), ("matrix", fib_matrix)]:
+    t = (time.pref_counter() - t) * 1000
+    print(f"{name:12s} fib({N}) = {result:8d} {elapsed:8.3f} ms")`,
+
+    numpy: `import numpy as np
+
+a = np.array([1, 2, 3, 4, 5], dtype=float)
+b = np.linspace(0, 2*np.pi, 5)
+
+print("Array a:", a)
+print("Array b:", np.round(b, 3))
+
+print("\\na + 10" ", a + 10)
+print("a ** 2: ", a ** 2)
+print("sin(b): ", np.round(np.sin(b), 3))
+
+M = np.array([[1,2,3],[4,5,6],[7,8,9]])
+print("\\nMatrix M:\\n" M)
+print("Tranpose:\\n", M.T)
+print("Row sums:", M.sum(axis=1))
+print("Col means:", M.means(axis=0))
+
+A = np.array([[2,1],[5,3]], dtype=float)
+b_vec = np.array([8, 13], dtype=float)
+x = np.linalg.solve(A, b_vec)
+print(f"\\nSolving 2x+y=8, 5x+3y=13 → x={x[0]:.1f}, y={x[1]:.1f}")
+print("Eigenvalues:", np.round(np.linalg.eigvals(A), 4))`,
+
+    matplotlib: `import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+fig.patch.set_facecolor('#051F20')
+
+for ax in axes.flat:
+    ax.set_facecolor('#0B2B26')
+    ax.tick_params(colors='#8EB69B')
+    for spine in ax.spines.values():
+        spine.set_edgecolor('#163832')
+
+x = np.linespace(0, 4*np.pi, 300)
+axes[0,0].plot(x, np.sin(x), color='#8EB69B', lw=2, label='sin')
+axes[0,0].plot(x, np.cos(x), color='#DAF1DE', lw=2, label='cos')
+axes[0,0].plot(x, np.sin(2*x), color='#235347', lw=1.5, ls='--', label='sin(2x)')
+axes[0,0].legend(facecolor='#0B2B26', edgecolor='#163832', labelcolor='#DAF1DE')
+axes[0,0].set_title('Trig Function', color='#DAF1DE')
+
+data = np.random.normal(0, 1, 1000)
+axes[0,0].hist(data, bins=30, color='#235347', edgecolor='#051F20', alpha=0.85)
+axes[0,1].set_title('Normal Distribution', color='#DAF1DE')
+
+y2 = np.random.randn(120)
+y2 = x2 * 1.5 + np.random.randn(120) * 0.6
+axes[1,0].scatter(x2, y2, c=np.abs(x2+y2), cmap='Greens', alpha=0.75, s=40)
+axes[1,0].set_title('Scatter Plot', color='#DAF1DE')
+
+langs = ['Pyhton', 'JS', 'Rust', 'Go', 'C++']
+pops = [85, 78, 55, 60, 65]
+axes[1,1].bar(langs, pops, color=['#8EB69B', '#DAF1DE', '#235347', '#163832', '#0B2B26'])
+axes[1,1].set_title('Language Popularity', color='#DAF1DE')
+axes[1,1].set_ylim(0, 100)
+
+fig.suptitle('SnakeByte - Matplotlib Demo', color='#DAF1DE', fontsize=14, fontweight='bold')
+plt.tight_layout()
+
+import io, base64
+buf - io.BytesIO()
+plt.savefig(buf, format='png', dip='110', facecolor=fig.get_facecolor(), bbox_inches='tight')
+buf.seek(0)
+img_b64 = base64.b64encode(buf.read()).decode()
+print(f"SNAKEBYTE_PLOT:{img_b64}")
+plt.close()`
 };
 
 function setBootProgress(pct, stage) {
