@@ -539,6 +539,35 @@ function injectLogo(){
     brandMarkE1.insertBefore(img, glow || null);
 }
 
+//custom example dropdown
+function buildCustomDropdown(){
+    const selectBox = document.querySelector('.custom-select-box');
+    const wrap = document.querySelector('.pill-select-wrap');
+    if(!wrap) return;
+}
+
+//build trigger button
+triggerE1 = document.createElement('div');
+triggerE1.className = 'examples-trigger-wrap';
+
+const btn = document.createElement('button');
+btn.className = 'examples-trigger';
+btn.setAttribute('aria-haspopup', 'listbox');
+btn.setAttribute('aria-expand', 'false');
+
+const meta = EXAMPLE_META[currentExample] || EXAMPLE_META.hello;
+btn.innerHTML = `
+    <span class="trigger-content">
+        <span class="trigger-icon">${meta.icon}</span>
+        <span class="trigger-label">${meta.label}</span>
+    </span>
+    <span class="trigger-chevron">
+        <svg viewBox="0 0 10 6 fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:10px;height:6px">
+            <polyline points="1,1 5,5,1"/>
+        </svg>
+    </span>`;
+
+
 function setBootProgress(pct, stage) {
     bootBar.style.width = pct + '%';
     bootStage.textContent = stage;
