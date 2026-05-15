@@ -242,3 +242,19 @@ body.light-theme{
     min-height: 1.2em;
     letter-spacing: 0.02em;
 }
+
+/*app shell*/
+.app-shell {
+    position: relative;
+    z-index: 1;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+}
+
+.topbar {
+    
+}

@@ -125,8 +125,9 @@ const bootSplash = document.getElementById('bootSplash');
 const bootBar = document.getElementById('bootBar');
 const bootStage = document.getElementById('bootStage');
 const appShell = document.getElementById('appShell');
+const statusDot = document.getElementById('statusDot');
 
-const tabe = Array.from(document.querySelectorAll('.tab'));
+const tabs = Array.from(document.querySelectorAll('.tab'));
 const panels = {
     output: document.getElementById('outputPanel'),
     errors: document.getElementById('errorsPanel'),
@@ -484,21 +485,21 @@ plt.close()`
 //tab swtching
 function switchTab(name) {
     tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-    Object.entries(panels).forEach(([k,p]) => p.classList.toggle('active', k === name));
+    Object.entries(panels).forEach(([k, p]) => p.classList.toggle('active', k === name));
 }
-tabs.forEach(t => t.addEventListner('click', () => switchTab(t.dataset.tab)));
+tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
 
 //status helpers
-function setStatus(msg, kind = 'ok'){
+function setStatus(msg, kind = 'ok') {
     statusText.textContent = msg;
     const dot = statusDot;
-    if (kind === 'error'){
+    if (kind === 'error') {
         dot.style.background = 'var(--red)';
         dot.style.boxShadow = '0 0 8px rgba(244,63,94,0.7)';
-    } else if (kind === 'warn'){
+    } else if (kind === 'warn') {
         dot.style.background = 'var(--yellow)';
         dot.style.boxShadow = '0 0 8px rgba(251,191,36,0.6)';
-    } else if (kind === 'run'){
+    } else if (kind === 'run') {
         dot.style.background = '#DAF1DE';
         dot.style.boxShadow = '0 0 8px rgba(218,241,222,0.7)';
     } else {
@@ -508,19 +509,20 @@ function setStatus(msg, kind = 'ok'){
 }
 
 //Line numbers
-function renderLineNumber(){
-    const n = editor.ariaValueMax.split('\n').length;
-    lineNumbers.textContent = Array.from({length: n}, (_, i) => i + 1).join('\n') + '\n';
+function renderLineNumbers() {
+    const n = editor.value.split('\n').length;
+    lineNumbers.textContent = Array.from({ length: n }, (_, i) => i + 1).join('\n') + '\n';
 }
-function syncScroll(){lineNumbers.scrollTop = editor.scrollTop;}
 
-function setBootProgress(pct, stage){
+function syncScroll() { lineNumbers.scrollTop = editor.scrollTop; }
+
+function setBootProgress(pct, stage) {
     bootBar.style.width = pct + '%';
     bootStage.textContent = stage;
 }
 
-function injectLogo(){
-    if(!brandMarkE1) return;
+function injectLogo() {
+    if (!brandMarkE1) return;
     Array.from(brandMarkE1.childNodes).forEach(n => {
         const isGlow = n.nodeType === Node.ELEMENT_NODE && n.classList.contains('brand-glow');
         if (!isGlow) n.remove();
@@ -540,23 +542,22 @@ function injectLogo(){
 }
 
 //custom example dropdown
-function buildCustomDropdown(){
+function buildCustomDropdown() {
     const selectBox = document.querySelector('.custom-select-box');
     const wrap = document.querySelector('.pill-select-wrap');
-    if(!wrap) return;
-}
+    if (!wrap) return;
 
-//build trigger button
-triggerE1 = document.createElement('div');
-triggerE1.className = 'examples-trigger-wrap';
+    //build trigger button
+    triggerE1 = document.createElement('div');
+    triggerE1.className = 'examples-trigger-wrap';
 
-const btn = document.createElement('button');
-btn.className = 'examples-trigger';
-btn.setAttribute('aria-haspopup', 'listbox');
-btn.setAttribute('aria-expand', 'false');
+    const btn = document.createElement('button');
+    btn.className = 'examples-trigger';
+    btn.setAttribute('aria-haspopup', 'listbox');
+    btn.setAttribute('aria-expand', 'false');
 
-const meta = EXAMPLE_META[currentExample] || EXAMPLE_META.hello;
-btn.innerHTML = `
+    const meta = EXAMPLE_META[currentExample] || EXAMPLE_META.hello;
+    btn.innerHTML = `
     <span class="trigger-content">
         <span class="trigger-icon">${meta.icon}</span>
         <span class="trigger-label">${meta.label}</span>
@@ -567,6 +568,21 @@ btn.innerHTML = `
         </svg>
     </span>`;
 
+}
+
+function loadExample(name){
+    editor.value = EXAMPLES[name] || EXAMPLES.hello;
+    renderLineNumbers();
+    outputBox.textContent = '';
+    errorBox.textContent = '';
+    setStatus(`Loaded: ${EXAMPLE_META[name]?.label || name}`);
+}
+
+function selectExample(key){
+    currentExample = key;
+    if (exampleSelect) exampleSelect.value = key;
+    loadExample(key);
+}
 
 function setBootProgress(pct, stage) {
     bootBar.style.width = pct + '%';
@@ -613,3 +629,5 @@ async function initPyodide() {
         bootBar.style.background = 'var(--red)';
     }
 }
+
+initPyodide();
