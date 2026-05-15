@@ -256,5 +256,83 @@ body.light-theme{
 }
 
 .topbar {
-    
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-sizing: var(--shadow-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-wrap: wrap;
 }
+
+.brand{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.brand-mark{
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    background: var(--grad-primary);
+    box-shadow: 0 8px 28px rgba(35, 83, 71, 0.55);
+    flex-shrink: 0;
+}
+
+.brand-glow {
+    position: absolute;
+    inset: 0;
+    background: var(--grad-primary);
+    opacity: 0;
+    filter: blur(10px);
+    transition: opacity 0.3s;
+}
+
+.brand-text h1 {
+    font-family: var(--display);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+}
+
+.brand-accent {
+    background: var(--grad-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.brand-text p{
+    font-size: 0.72rem;
+    color: var(--text-2);
+    margin-top: 3px;
+}
+
+.topbar-center{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+/* .topbar-actions{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.btn{
+    display: ;
+} */
