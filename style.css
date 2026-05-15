@@ -101,8 +101,54 @@ body.light-theme{
     background-size: 200px;
 }
 
+/*theme transition*/
+.split-curtain{
+    position: fixed;
+    top: 0;
+    height: 100%;
+    width: 51%;
+    z-index: 99999;
+    pointer-events: none;
+    will-change: transform;
+}
 
+.split-curtain-left{
+    left: 0;
+    transform-origin: left center;
+    transform: scaleX(0);
+}
 
+.split-curtain-right{
+    right: 0;
+    transform-origin: right center;
+    transform: scaleX(0);
+}
+
+/*phase 1 for slide In(cover the screen)*/
+.split-curtain.covering{
+    transform: scaleX(1);
+    transition: transform 0.32s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/*phase 2 for split out(reveal new theme)*/
+.split-curtain.splitting{
+    transform: scale(0);
+    transition: transform 0.42s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/*vertical line*/
+.split-curtain-left::after{
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: rgba(142, 182, 155, 0.6);
+    box-shadow: 0 0 20px rgba(142, 182, 155, 0.8);
+}
+
+/*boot splash*/
 .boot-splash{
     position: fixed;
     inset: 0;
@@ -110,6 +156,10 @@ body.light-theme{
     display: flex;
     align-items: center;
     justify-content: center;
+    background: 
+        radial-gradient(ellipse 80% 60% at 40% 30%, rgba(22, 56, 50, 0.6) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 80% 70%, rgba(142, 182, 155, 0.15) 0%, transparent 50%),
+        #051F20;
     transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
@@ -119,12 +169,76 @@ body.light-theme{
     transform: scale(1.03);
 }
 
+.boot-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+}
+
+.boot-logo{
+    font-size: 4rem;
+    animation: bootPulse 1.6s ease-in-out infinite;
+    filter: drop-shadow(0 0 24px rgba(142, 182, 155, 0.5));
+}
+
+@keyframes bootPulse{
+    0%,
+    100%{
+        transform: scale(1) rotate(-3deg);
+        opacity: 0.85;
+    }
+
+    50%{
+        transform: scale(1.1) rotate(3deg);
+        opacity: 1;
+    }
+}
+
+.boot-brand {
+    font-family: var(--display);
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #DAF1DE;
+    letter-spacing: -0.02em;
+}
+
+.boot-brand span {
+    background: var(--grad-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.boot-sub {
+    color: var(--text-2);
+    font-size: 0.95rem;
+    margin-top: -6px;
+}
+
+.boot-bar-wrap {
+    width: 280px;
+    height: 4px;
+    background: rgba(142, 182, 155, 0.1);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
 .boot-bar{
     height: 100%;
     width: 0%;
+    background: var(--grad-primary);
+    border-radius: 99px;
     transition: width 0.4s ease;
+    box-shadow: 0 0 16px rgba(142, 182, 155, 0.5);
 }
 
 .boot-stage{
-    min-height: 1.2em
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    min-height: 1.2em;
+    letter-spacing: 0.02em;
 }
