@@ -290,7 +290,7 @@ body.light-theme {
     flex-shrink: 0;
 }
 
-.brand-mark svg{
+.brand-mark svg {
     width: 26px;
     height: 26px;
 }
@@ -304,7 +304,7 @@ body.light-theme {
     transition: opacity 0.3s;
 }
 
-.brand-mark:hover .brand-glow{
+.brand-mark:hover .brand-glow {
     opacity: 0.6;
 }
 
@@ -687,11 +687,11 @@ body.light-theme .toggle-track {
     position: relative;
 }
 
-body.light-theme .toggle-indicator{
+body.light-theme .toggle-indicator {
     background: linear-gradient(135deg, #c5e3cb 0%, #daf1de 100%);
 }
 
-.theme-toggle input:checked ~ .toggle-track .toggle-indicator {
+.theme-toggle input:checked~.toggle-track .toggle-indicator {
     transform: translate3d(25%, 0, 0);
 }
 
@@ -1127,7 +1127,7 @@ body.light-theme .error-box {
     color: #dc2626 !important;
 }
 
-.error-box{
+.error-box {
     color: var(--red) !important;
 }
 
@@ -1264,7 +1264,7 @@ body.light-theme .error-box {
     background: transparent;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
     background: rgba(142, 182, 155, 0.18);
     border-radius: 99px;
 }
@@ -1371,13 +1371,13 @@ textarea#editor::-webkit-scrollbar-thumb:active {
 /* light theme override */
 body.light-theme textarea#editor::-webkit-scrollbar-track,
 body.light-theme .code-box::-webkit-scrollbar-track,
-body.light-theme .vars-box::-webkit-scrollbar-track{
+body.light-theme .vars-box::-webkit-scrollbar-track {
     background: rgba(35, 83, 71, 0.08);
 }
 
 body.light-theme textarea#editor::-webkit-scrollbar-thumb,
 body.light-theme .code-box::-webkit-scrollbar-thumb,
-body.light-theme .vars-box::-webkit-scrollbar-thumb{
+body.light-theme .vars-box::-webkit-scrollbar-thumb {
     background: linear-gradient(180deg, #235347 0%, #8EB69B 100%);
     background-clip: padding-box;
     box-shadow: 0 0 6px rgba(35, 83, 71, 0.2);
@@ -1385,7 +1385,7 @@ body.light-theme .vars-box::-webkit-scrollbar-thumb{
 
 body.light-theme textarea#editor::-webkit-scrollbar-thumb:hover,
 body.light-theme .code-box::-webkit-scrollbar-thumb:hover,
-body.light-theme .vars-box::-webkit-scrollbar-thumb:hover{
+body.light-theme .vars-box::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(180deg, #051F20 0%, #235347 100%);
     background-clip: padding-box;
     box-shadow: 0 0 12px rgba(35, 83, 71, 0.35);
@@ -1394,57 +1394,58 @@ body.light-theme .vars-box::-webkit-scrollbar-thumb:hover{
 /* scroller firefox */
 textarea#editor,
 .code-box,
-.vars-box{
+.vars-box {
     scrollbar-width: thin;
     scrollbar-color: #235347 transparent;
 }
 
 body.light-theme textarea#editor,
 body.light-theme .code-box,
-body.light-theme .vars-box{
+body.light-theme .vars-box {
     scrollbar-color: #8EB69B transparent;
 }
 
 /* entrance animation */
-@keyframes fadeInUp{
-    from{
+@keyframes fadeInUp {
+    from {
         opacity: 0;
         transform: translateY(10px);
     }
-    to{
+
+    to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-.topbar{
+.topbar {
     animation: fadeInUp 0.35s ease both;
 }
 
-.pkg-bar{
+.pkg-bar {
     animation: fadeInUp 0.38s ease both 0.04s;
 }
 
-.editor-panel{
+.editor-panel {
     animation: fadeInUp 0.4s ease both 0.08s;
 }
 
-.output-panel{
+.output-panel {
     animation: fadeInUp 0.4s ease both 0.13s;
 }
 
-@keyframes spin{
-    to{
+@keyframes spin {
+    to {
         transform: rotate(360deg);
     }
 }
 
-.btn-primary.running .run-circle{
+.btn-primary.running .run-circle {
     animation: spin 0.7s linear infinite;
 }
 
 /* time badge */
-#execTime{
+#execTime {
     font-family: var(--mono);
     font-size: 0.72rem;
     padding: 2px 8px;
@@ -1456,83 +1457,96 @@ body.light-theme .vars-box{
 }
 
 /* Responsiveness */
-@media (max-width: 1080px){
-    .app-shell{
+@media (max-width: 1080px) {
+    .app-shell {
         height: auto;
         min-height: 100vh;
         overflow: visible;
     }
 
-    .workspace{
+    .workspace {
         grid-template-columns: 1fr;
         overflow: visible;
     }
 
-    .editor-panel{
+    .editor-panel {
         min-height: 340px;
         max-height: 52vh;
     }
 
-    .output-panel{
+    .output-panel {
         min-height: 400px;
         max-height: 60vh;
     }
 }
 
-@media(max-width: 768px){
-    .app-shell{
+@media(max-width: 768px) {
+    .app-shell {
         padding: 8px;
         gap: 8px;
     }
-    .topbar{
+
+    .topbar {
         padding: 10px 12px;
         flex-direction: column;
         align-items: stretch;
         gap: 10px;
     }
-    .topbar-center{
+
+    .topbar-center {
         justify-content: flex-start;
     }
-    .topbar-actions{
+
+    .topbar-actions {
         gap: 6px;
         flex-wrap: wrap;
     }
-    .brand-text p{
+
+    .brand-text p {
         display: none;
     }
-    .btn{
+
+    .btn {
         padding: 8px 13px;
         font-size: 0.82rem;
     }
-    .btn-primary{
+
+    .btn-primary {
         padding: 8px 16px;
     }
-    .hint-badge{
+
+    .hint-badge {
         display: none;
     }
-    textarea#editor{
+
+    textarea#editor {
         font-size: 13px;
     }
-    .line-numbers{
+
+    .line-numbers {
         font-size: 13px;
     }
-    .pkg-bar{
+
+    .pkg-bar {
         gap: 6px;
     }
-    .examples-dropdown{
+
+    .examples-dropdown {
         left: 0;
         transform: translateX(0);
     }
-    .examples-dropdown.open{
+
+    .examples-dropdown.open {
         transform: translateX(0);
     }
 }
 
-@media (max-width: 480px){
-    .examples-trigger{
+@media (max-width: 480px) {
+    .examples-trigger {
         min-width: 160px;
     }
-    .var-row{
+
+    .var-row {
         grid-template-columns: 100px 60px 1fr;
     }
 }

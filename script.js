@@ -571,7 +571,7 @@ function buildCustomDropdown() {
 
 }
 
-function loadExample(name){
+function loadExample(name) {
     editor.value = EXAMPLES[name] || EXAMPLES.hello;
     renderLineNumbers();
     outputBox.textContent = '';
@@ -579,7 +579,7 @@ function loadExample(name){
     setStatus(`Loaded: ${EXAMPLE_META[name]?.label || name}`);
 }
 
-function selectExample(key){
+function selectExample(key) {
     currentExample = key;
     if (exampleSelect) exampleSelect.value = key;
     loadExample(key);
