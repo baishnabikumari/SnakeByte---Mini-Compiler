@@ -188,13 +188,11 @@ print("Long: ", long_ones)`,
         def __init__(self, name, sound):
             self.name = name
             self.sound = sound
-        
         def speak(self):
             return f"{self.name} says {self.sound}!"
-            
         def __repr__(self):
             return f"<Animal name={self.name!r}>"
-            
+        
     class Dog(Animal):
         def __init__(self, name):
             super().__init__(name, "Woof")
@@ -263,7 +261,7 @@ def retry(times=3):
             for attempt in range(1, times + 1):
                 try:
                     return func(*args, **kwargs)
-                expect Exception as e:
+                except Exception as e:
                     print(f"  Attempt {attempt} failed: {e}")
             raise RuntimeError("All retries exhausted")
         return wrapper
@@ -277,7 +275,7 @@ def slow_sum(n):
 def bubble_sort(lst):
     lst = lst[:]
     for i in range(len(lst)):
-        for j in range(len(1st) - i - 1):
+        for j in range(len(lst) - i - 1):
             if lst[j] > lst[j+1]:
                 lst[j], lst[j+1] = lst[j+1], lst[j]
     return lst
@@ -384,7 +382,7 @@ def fib_iterative(n):
         a, b = b, a + b
     return b
 
-def fib_memorized(n, memo={}):
+def fib_memoized(n, memo={}):
     if n in memo: return memo[n]
     if n <= 1: return n
     memo[n] = fib_memoized(n-1) + fib_memoized(n-2)
@@ -410,7 +408,7 @@ for name, fn in [("recursive", fib_recursive), ("iterative", fib_iterative),
                  ("memoized", fib_memoized), ("matrix", fib_matrix)]:
     t = time.pref_counter()
     result = fn(N)
-    elapsed = (time.pref_counter() - t) * 1000
+    elapsed = (time.perf_counter() - t) * 1000
     print(f"{name:12s} fib({N}) = {result:8d} {elapsed:8.3f} ms")`,
 
     numpy: `import numpy as np
@@ -478,7 +476,7 @@ plt.tight_layout()
 
 import io, base64
 buf = io.BytesIO()
-plt.savefig(buf, format='png', dip=110, facecolor=fig.get_facecolor(), bbox_inches='tight')
+plt.savefig(buf, format='png', dpi=110, facecolor=fig.get_facecolor(), bbox_inches='tight')
 buf.seek(0)
 img_b64 = base64.b64encode(buf.read()).decode()
 print(f"SNAKEBYTE_PLOT:{img_b64}")
@@ -611,7 +609,7 @@ async function initPyodide() {
             class _SnakeByteCapture(io.StringIO):
                 pass
             _sb_stdout = _SnakeByteCapture()
-            _sb_stdout = _SnakeByteCapture()
+            _sb_stderr = _SnakeByteCapture()
             `);
 
         setBootProgress(100, 'Ready!');
