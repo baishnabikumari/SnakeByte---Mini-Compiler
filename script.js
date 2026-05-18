@@ -15,7 +15,7 @@ const ICONS = {
     listcomp: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="3,3 1,5 3,7"/>
         <polyline points="13,3 15,5 13,7"/>
-        <line x1="5" y1="5" x2="13" y2="10"/>
+        <line x1="5" y1="5" x2="11" y2="5"/>
         <line x1="3" y1="10" x2="13" y2="10"/>
         <line x1="3" y1="13" x2="9" y2="13"/>
     </svg>`,
@@ -34,12 +34,12 @@ const ICONS = {
         <polyline points="8,14 11.5,14 11.5,10.5"/>
     </svg>`,
 
-    decorators: `<svg viewBox="0 0 16 16" fill="none" stroke="currentcolor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    decorators: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="8.5" cy="8" r="2.5"/>
-        <path d="M14 8 C11 4.5 6 4.5 6 8 C6 11 4 12 4 12 L8.5 12"/>"
+        <path d="M11 8 C11 4.5 6 4.5 6 8 C6 11 4 12 4 12 L8.5 12"/>
     </svg>`,
 
-    regex: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap"round" stroke-linejoin="round">
+    regex: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <line x1="5" y1="1.5" x2="3" y2="14.5"/>
         <line x1="13" y1="1.5" x2="11" y2="14.5"/>
         <line x1="4.5" y1="8" x2="11.5" y2="8"/>
@@ -47,7 +47,7 @@ const ICONS = {
         <circle cx="8" cy="12" r="1" fill="currentColor" stroke="none"/>
     </svg>`,
 
-    json: `<svg viewBox"0 0 16 16" fill="none" stroke"currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    json: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="M5 2 C3.5 2 3 3 3 4.5 C3 6 2 6.5 2 8 C2 9.5 3 10 3 11.5 C3 13 3.5 14 5 14"/>
         <path d="M11 2 C12.5 2 13 3 13 4.5 C13 6 14 6.5 14 8 C14 9.5 13 10 13 11.5 C13 13 12.5 14 11 14"/>
         <line x1="6.5" y1="8" x2="9.5" y2="8"/>
@@ -56,7 +56,7 @@ const ICONS = {
     exceptions: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="M8 1.5 L14.5 13 L1.5 13 Z"/>
         <line x1="8" y1="6" x2="8" y2="9.5"/>
-        <circle cx="8" cy="11.2" r="0.6" fill="currentcolor" stroke="none"/>
+        <circle cx="8" cy="11.2" r="0.6" fill="currentColor" stroke="none"/>
     </svg>`,
 
     fibonacci: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
@@ -67,7 +67,7 @@ const ICONS = {
         <line x1="2" y1="14" x2="14" y2="14"/>
     </svg>`,
 
-    numpy: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="round" stroke-linejoin="round">
+    numpy: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <rect x="1.5" y="1.5" width="4.5" height="4.5" rx="0.5"/>
         <rect x="8"   y="1.5" width="4.5" height="4.5" rx="0.5"/>
         <rect x="1.5" y="8"   width="4.5" height="4.5" rx="0.5"/>
@@ -111,7 +111,7 @@ const outputBox = document.getElementById('outputBox');
 const errorBox = document.getElementById('errorBox');
 const varsBox = document.getElementById('varsBox');
 const plotBox = document.getElementById('plotBox');
-const exectTimeE1 = document.getElementById('execTime');
+const execTimeEl = document.getElementById('execTime');
 const runBtn = document.getElementById('runBtn');
 const clearBtn = document.getElementById('clearBtn');
 const resetBtn = document.getElementById('resetBtn');
@@ -126,6 +126,7 @@ const bootBar = document.getElementById('bootBar');
 const bootStage = document.getElementById('bootStage');
 const appShell = document.getElementById('appShell');
 const statusDot = document.getElementById('statusDot');
+const brandMarkEl = document.querySelector('.brand-mark')
 
 const tabs = Array.from(document.querySelectorAll('.tab'));
 const panels = {
@@ -142,8 +143,8 @@ let isRunning = false;
 let installedPkgs = new Set();
 let currentExample = 'hello';
 let dropdownOpen = false;
-let triggerE1 = null;
-let dropdownE1 = null;
+let triggerEl = null;
+let dropdownEl = null;
 
 //examples codes
 const EXAMPLES = {
@@ -151,7 +152,7 @@ const EXAMPLES = {
 print("Hello from Baishu")
 print("Happy coding Hope you love this project")
 
-name = input.__doc__and "SnakeByte" or "World"
+name = input.__doc__ and "SnakeByte" or "World"
 print(f"Welcome to Snake{'Byte'}!")`,
 
     math: `import math, random, statistics
@@ -173,7 +174,7 @@ evens = [x for x in range(20) if x % 2 == 0]
 matrix = [[i * j for j in range(1, 4)] for i in range(1, 4)]
 words = ["snake", "byte", "pyhton", "wasm"]
 upper = list(map(str.upper, words))
-long_ones = list(filter(lamda w: len(w) > 4, words))
+long_ones = list(filter(lambda w: len(w) > 4, words))
 
 print("Square: ", squares)
 print("Events: ", evens)
@@ -208,7 +209,7 @@ print("Long: ", long_ones)`,
         def ignore(self):
             return f"{self.name} ignore you."
             
-    animal = [Dog("Rex"), Cat("Whiskers"), Dog("Buddy")]
+    animals = [Dog("Rex"), Cat("Whiskers"), Dog("Buddy")]
     for a in animals:
         print(a.speak())
         
@@ -240,7 +241,7 @@ print("Primes:  ", primes)
 
 groups = [(k, list(v)) for k, v in itertools.groupby("AABBCCDDAAEE")]
 print("\\nRLE groups:")
-for char, group in group:
+for char, group in groups:
     print(f"  {char!r} x {len(group)}")`,
 
     decorators: `import time, functools
@@ -262,7 +263,7 @@ def retry(times=3):
             for attempt in range(1, times + 1):
                 try:
                     return func(*args, **kwargs)
-                expect Exceptions as e:
+                expect Exception as e:
                     print(f"  Attempt {attempt} failed: {e}")
             raise RuntimeError("All retries exhausted")
         return wrapper
@@ -295,7 +296,7 @@ text = """
 
 github = re.findall(r'https?://github\.com/[A-Za-z0-9_-]+', text)
 name = re.findall(r'My name:\s*([^\n]+)', text)
-date-created = re.findall(r'Date Created:\s*(\d{4}-\d{2})', text)
+date_created = re.findall(r'Date Created:\s*(\d{4}-\d{2})', text)
 
 print("Github:", github)
 print("Name:", name)
@@ -323,13 +324,13 @@ words = "i dont know what to write here umm ya my bad".split()
 counter = collections.Counter(words)
 print("\\nWords counts:", dict(counter.most_common(4)))
 
-ddict = collections.defaultdict(lists)
+ddict = collections.defaultdict(list)
 for w in words:
     ddict[len(w)].append(w)
 print("By length:", dict(sorted(ddict.items())))`,
 
     exceptions: `class InsufficientFundsError(Exception):
-        def __init__(set, amount, balance):
+        def __init__(self, amount, balance):
             self.amount = amount
             self.balance = balance
             super().__init__(f"Cannot withdraw £{amount:.2f} — balance is £{balance:.2f}")
@@ -342,7 +343,7 @@ class BankAccount:
     
     def deposit(self, amount):
         if amount <= 0:
-            raise ValueError("Deposit must be in positive)
+            raise ValueError("Deposit must be in positive")
         self._bal += amount
         self._history.append(f"+£{amount:.2f}")
         return self
@@ -359,7 +360,7 @@ class BankAccount:
         return self._bal
     
     def __enter__(self): return self
-    def __exit__(self, *args): print(f"[{self.owner}] session closed. Balance: £{self._bal:.2f})
+    def __exit__(self, *args): print(f"[{self.owner}] session closed. Balance: £{self._bal:.2f}")
     
 with BankAccount("Alice", 1000) as acc:
     acc.deposit(500).withdraw(200)
@@ -386,7 +387,7 @@ def fib_iterative(n):
 def fib_memorized(n, memo={}):
     if n in memo: return memo[n]
     if n <= 1: return n
-    memo[n] = fib_memorized(n-1) + fib_memoized(n-2)
+    memo[n] = fib_memoized(n-1) + fib_memoized(n-2)
     return memo[n]
 
 def fib_matrix(n):
@@ -396,7 +397,7 @@ def fib_matrix(n):
             [A[1][0]*B[0][0]+A[1][1]*B[1][0], A[1][0]*B[0][1]+A[1][1]*B[1][1]],
         ]
     def mat_pow(M, n):
-        if n === 1: return M
+        if n == 1: return M
         if n % 2 == 0:
             half = mat_pow(M, n // 2)
             return mat_mul(half, half)
@@ -407,7 +408,9 @@ def fib_matrix(n):
 N = 30
 for name, fn in [("recursive", fib_recursive), ("iterative", fib_iterative),
                  ("memoized", fib_memoized), ("matrix", fib_matrix)]:
-    t = (time.pref_counter() - t) * 1000
+    t = time.pref_counter()
+    result = fn(N)
+    elapsed = (time.pref_counter() - t) * 1000
     print(f"{name:12s} fib({N}) = {result:8d} {elapsed:8.3f} ms")`,
 
     numpy: `import numpy as np
@@ -418,15 +421,15 @@ b = np.linspace(0, 2*np.pi, 5)
 print("Array a:", a)
 print("Array b:", np.round(b, 3))
 
-print("\\na + 10" ", a + 10)
+print("\\na + 10:", a + 10)
 print("a ** 2: ", a ** 2)
 print("sin(b): ", np.round(np.sin(b), 3))
 
 M = np.array([[1,2,3],[4,5,6],[7,8,9]])
-print("\\nMatrix M:\\n" M)
+print("\\nMatrix M:\\n", M)
 print("Tranpose:\\n", M.T)
 print("Row sums:", M.sum(axis=1))
-print("Col means:", M.means(axis=0))
+print("Col means:", M.mean(axis=0))
 
 A = np.array([[2,1],[5,3]], dtype=float)
 b_vec = np.array([8, 13], dtype=float)
@@ -448,7 +451,7 @@ for ax in axes.flat:
     for spine in ax.spines.values():
         spine.set_edgecolor('#163832')
 
-x = np.linespace(0, 4*np.pi, 300)
+x = np.linspace(0, 4*np.pi, 300)
 axes[0,0].plot(x, np.sin(x), color='#8EB69B', lw=2, label='sin')
 axes[0,0].plot(x, np.cos(x), color='#DAF1DE', lw=2, label='cos')
 axes[0,0].plot(x, np.sin(2*x), color='#235347', lw=1.5, ls='--', label='sin(2x)')
@@ -456,10 +459,10 @@ axes[0,0].legend(facecolor='#0B2B26', edgecolor='#163832', labelcolor='#DAF1DE')
 axes[0,0].set_title('Trig Function', color='#DAF1DE')
 
 data = np.random.normal(0, 1, 1000)
-axes[0,0].hist(data, bins=30, color='#235347', edgecolor='#051F20', alpha=0.85)
+axes[0,1].hist(data, bins=30, color='#235347', edgecolor='#051F20', alpha=0.85)
 axes[0,1].set_title('Normal Distribution', color='#DAF1DE')
 
-y2 = np.random.randn(120)
+x2 = np.random.randn(120)
 y2 = x2 * 1.5 + np.random.randn(120) * 0.6
 axes[1,0].scatter(x2, y2, c=np.abs(x2+y2), cmap='Greens', alpha=0.75, s=40)
 axes[1,0].set_title('Scatter Plot', color='#DAF1DE')
@@ -474,8 +477,8 @@ fig.suptitle('SnakeByte - Matplotlib Demo', color='#DAF1DE', fontsize=14, fontwe
 plt.tight_layout()
 
 import io, base64
-buf - io.BytesIO()
-plt.savefig(buf, format='png', dip='110', facecolor=fig.get_facecolor(), bbox_inches='tight')
+buf = io.BytesIO()
+plt.savefig(buf, format='png', dip=110, facecolor=fig.get_facecolor(), bbox_inches='tight')
 buf.seek(0)
 img_b64 = base64.b64encode(buf.read()).decode()
 print(f"SNAKEBYTE_PLOT:{img_b64}")
@@ -522,8 +525,8 @@ function setBootProgress(pct, stage) {
 }
 
 function injectLogo() {
-    if (!brandMarkE1) return;
-    Array.from(brandMarkE1.childNodes).forEach(n => {
+    if (!brandMarkEl) return;
+    Array.from(brandMarkEl.childNodes).forEach(n => {
         const isGlow = n.nodeType === Node.ELEMENT_NODE && n.classList.contains('brand-glow');
         if (!isGlow) n.remove();
     });
@@ -537,8 +540,8 @@ function injectLogo() {
     ].join(';');
     //fall back if the file is not there
     img.onerror = () => img.remove();
-    const glow = brandMarkE1.querySelectorAll('.brand-glow');
-    brandMarkE1.insertBefore(img, glow || null);
+    const glow = brandMarkEl.querySelector('.brand-glow');
+    brandMarkEl.insertBefore(img, glow || null);
 }
 
 //custom example dropdown
@@ -548,8 +551,8 @@ function buildCustomDropdown() {
     if (!wrap) return;
 
     //build trigger button
-    triggerE1 = document.createElement('div');
-    triggerE1.className = 'examples-trigger-wrap';
+    triggerEl = document.createElement('div');
+    triggerEl.className = 'examples-trigger-wrap';
 
     const btn = document.createElement('button');
     btn.className = 'examples-trigger';
@@ -563,8 +566,8 @@ function buildCustomDropdown() {
         <span class="trigger-label">${meta.label}</span>
     </span>
     <span class="trigger-chevron">
-        <svg viewBox="0 0 10 6 fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:10px;height:6px">
-            <polyline points="1,1 5,5,1"/>
+        <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:10px;height:6px">
+            <polyline points="1,1 5,5 9,1"/>
         </svg>
     </span>`;
 
@@ -584,10 +587,10 @@ function selectExample(key){
     loadExample(key);
 }
 
-function setBootProgress(pct, stage) {
-    bootBar.style.width = pct + '%';
-    bootStage.textContent = stage;
-}
+// function setBootProgress(pct, stage) {
+//     bootBar.style.width = pct + '%';
+//     bootStage.textContent = stage;
+// }
 
 async function initPyodide() {
     try {
