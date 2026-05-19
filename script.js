@@ -569,7 +569,85 @@ function buildCustomDropdown() {
         </svg>
     </span>`;
 
+    dropdownEl = document.createElement('div');
+    dropdownEl.className = 'example-dropdown';
+    dropdownEl.setAttribute('role', 'listbox');
+
+    const header = document.createElement('div');
+    header.className = 'dropdown-header';
+    header.textContent = '⬡ EXAMPLES';
+    dropdownEl.appendChild(header);
+
+    const list = document.createElement('div');
+    list.className = 'dropdown-list';
+
+    Object.keys(EXAMPLE_META).forEach(key => {
+        if(key === 'numpy'){
+            const div = document.createElement('div');
+            div.className = 'dropdown-divider';
+            list.appendChild(div);
+        }
+        const m = EXAMPLE_META[key];
+        const item = document.createElement('div');
+        item.className = 'dropdown-item' + (key === currentExample ? ' active' : '');
+        item.setAttribute('role', 'option');
+        item.setAttribute('data-key', key);
+        item.setAttribute('aria-selected', key === currentExample ? 'true' : 'false');
+        item.innerHTML = `
+            <span class="dropdown-item-icon">${m.icon}</span>
+            <span class="dropdown-item-label">${m.label}</span>
+            ${m.badge ? `<span class="dropdown-item-badge">${m.badge}</span>` : ''}`;
+        item.addEventListener('click', () => {selectExample(key); closeDropdown(); });
+        item.appendChild(item);
+    });
+
+    dropdownEl.appendChild(list);
+    triggerEl.appendChild(btn);
+    document.body.appendChild(dropdownEl);
+
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdownOpen ? closeDropdown() : openDropdown(btn);
+    });
+    window.addEventListener('scroll', repositionDropdown, { passive: true });
+    window.addEventListener('resize', repositionDropdown, { passive: true });
+
+    wrap.innerHTML = '';
+    wrap.appendChild(triggerEl);
+
 }
+
+function repositionDropdown(){
+    if(!dropdownOpen || triggerEl) return;
+    const btn = triggerEl.querySelector('.examples-trigger');
+    if(!btn) return;
+    const rect = btn.getBoundingClientRect();
+    let left = rect.left + rect.width / 2 - 120;
+    left = Math.max(8, Math.min(left, window.innerWidth - 248));
+    dropdownEl.style.top = (rect.bottom + 10) + 'px';
+    dropdownEl.style.left = left + 'px';
+}
+
+function openDropdown(btn){
+    dropdownEl = true;
+    repositionDropdown();
+    dropdownEl.classList.add('open');
+    btn.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+}
+
+function closeDropdown(){
+    dropdownOpen = false;
+    dropdownEl.classList.remove('open');
+    const btn = triggerEl && triggerEl.querySelector('.examples-trigger');
+    if(btn){
+        btn.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+    }
+}
+document.addEventListener('click', () => {
+    if (dropdownOpen) closeDropdown();
+});
 
 function loadExample(name) {
     editor.value = EXAMPLES[name] || EXAMPLES.hello;
@@ -582,9 +660,57 @@ function loadExample(name) {
 function selectExample(key) {
     currentExample = key;
     if (exampleSelect) exampleSelect.value = key;
+
+    const btn = triggerEl & triggerEl.querySelector('.examples-trigger');
+    const meta = EXAMPLE_META[key] || EXAMPLE_META.hello;
+    if(btn){
+        btn.querySelector('.trigger-icon').innerHTML = meta.icon;
+        btn.querySelector('.trigger-label').textContent = meta.label;
+    }
+    if(dropdownEl){
+        dropdownEl.querySelectorAll('.dropdown-item').forEach(el => {
+            const active = el.dataset.key === key;
+            el.classList.toggle('active'. active);
+            el.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+    }
     loadExample(key);
 }
 
+function applyTheme(light){
+    const newBg = light ? '#DAF1DE' : '#051F20';
+    const left = document.createElement('div');
+    const right = document.createElement('div');
+    left.className = 'split-curtain split-curtain-left';
+    right.className = 'split-curtain split-curtain-right';
+    left.style.background = newBg;
+    right.style.background = newBg;
+    document.body.appendChild(left);
+    document.body.appendChild(right);
+
+    requestAnimationFrame(() => {
+        left.classList.add('covering');
+        right.classList.add('covering');
+    });
+
+    setTimeout(() => {
+        document.body.classList.toggle('light-theme', light);
+        themeCheck.checked = light;
+        localStorage.setItem('sb-theme', light ? 'light' : 'dark');
+        left.offsetHeight;
+        left.classList.remove('covering');
+        right.classList.remove('covering');
+        left.classList.remove('splitting');
+        right.classList.add('splitting');
+        setTimeout(() => { left.remove(); right.remove(); }, 500);
+    }, 340);
+}
+themeCheck.addEventListener('change', () => applyTheme(themeCheck.checked));
+
+if (localStorage.getItem('sb-theme') === 'light'){
+    document.body.classList.add('light-theme');
+    themeCheck.checked = true;
+}
 // function setBootProgress(pct, stage) {
 //     bootBar.style.width = pct + '%';
 //     bootStage.textContent = stage;
