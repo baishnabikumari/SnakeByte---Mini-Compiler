@@ -740,7 +740,7 @@ json.dumps(_vars)
 `);
         const obj = JSON.parse(raw);
         const keys = Object.keys(obj);
-        if(keys.length === 0){
+        if (keys.length === 0) {
             varsBox.innerHTML = '<div class="vars-empty">No user variables yet.<br>Run some code first!</div>';
             return;
         }
@@ -750,13 +750,13 @@ json.dumps(_vars)
                 <span class="var-type">${escHtml(obj[k].type)}</span>
                 <span class="var-val">${escHtml(obj[k].val)}</span>
             </div`).join('');
-    } catch (_) {}
+    } catch (_) { }
 }
 
-function escHtml(s){
+function escHtml(s) {
     return String(s)
-        .replace(/&/g, '&amp;').replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 //matplotlib preamble
@@ -787,7 +787,7 @@ except Exception:
 
 //Run code
 async function runCode() {
-    if(!pyodide || isRunning) return;
+    if (!pyodide || isRunning) return;
     isRunning = true;
     runBtn.classList.add('running');
     setStatus('Running...', 'run');
@@ -799,37 +799,39 @@ async function runCode() {
     const t0 = performance.now();
     let stdout_lines = [], stderr_lines = [], allPlots = [];
 
-    try{
+    try {
         await pyodide.loadPackageFromImports(code);
 
-        pyodide.setStdout({ batched: (line) => {
-            if (line.startWith('SNAKEBYTE_PLOT:')){
-                allPlots.push(line.slice('SNAKEBYTE_PLOT:'.length));
-            } else {
-                stdout_lines.push(line);
+        pyodide.setStdout({
+            batched: (line) => {
+                if (line.startWith('SNAKEBYTE_PLOT:')) {
+                    allPlots.push(line.slice('SNAKEBYTE_PLOT:'.length));
+                } else {
+                    stdout_lines.push(line);
+                }
             }
-        }});
+        });
         pyodide.setStderr({ batched: (line) => stderr_lines.push(line) });
 
         await pyodide.runPythonAsync(MATPLOTLIB_PREAMBLE);
         await pyodide.runPythonAsync(code);
         await pyodide.runPythonAsync(`_sb_capture_figures()`);
 
-        const elapsed = ((performance.now() -t0) / 1000).toFixed(3);
+        const elapsed = ((performance.now() - t0) / 1000).toFixed(3);
         execTimeEl.textContent = `${elapsed}s`;
         execTimeEl.style.display = 'inline';
 
         outputBox.textContent = stdout_lines.join('\n').trimEnd() || '(no output)';
         if (stderr_lines.length > 0) errorBox.textContent = stderr_lines.join('\n').trimEnd();
 
-        if (allPlots.length > 0){
+        if (allPlots.length > 0) {
             plotBox.innerHTML = allPlots.map((b64, i) => `
                 <div class="plot-figures">
                     ${allPlots.length > 1 ? `<div class="plot-label">Figure ${i + 1}</div>` : ''}
                     <img src="data:image/png;base64,${b64}" alt='Figure ${i + 1}"/>
                 </div>`).join('');
             switchTab('plot');
-        } else{
+        } else {
             switchTab('output');
         }
 
@@ -838,20 +840,20 @@ async function runCode() {
     } catch (err) {
         const elapsed = ((performance.now() - t0 / 1000).toFixed(3));
         let msg = err.message || String(err);
-        if (msg.includes('Traceback')){
+        if (msg.includes('Traceback')) {
             const lines = msg.split('\n');
             const start = lines.findIndex(l => l.startWith('Traceback'));
             if (start !== -1) msg = lines.slice(start).join('\n');
         }
         errorBox.textContent = msg;
-        if(stdout_lines.length > 0) outputBox.textContent = stdout_lines.join('\n');
+        if (stdout_lines.length > 0) outputBox.textContent = stdout_lines.join('\n');
         switchTab('error');
         setStatus('Error - ' + msg.split('\n').pop().trim(), 'error');
     } finally {
         isRunning = false;
         runBtn.classList.remove('running');
-        pyodide.setStdout({ batched: () => {} });
-        pyodide.setStderr({ batched: () => {} });
+        pyodide.setStdout({ batched: () => { } });
+        pyodide.setStderr({ batched: () => { } });
     }
 }
 
