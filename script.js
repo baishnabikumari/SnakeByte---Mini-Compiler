@@ -858,20 +858,20 @@ async function runCode() {
 }
 
 //package installer
-async function installPackage(){
-    if(!micropip) return;
+async function installPackage() {
+    if (!micropip) return;
     const raw = pkgInput.value.trim();
-    if(!raw) return;
+    if (!raw) return;
     const pkgs = raw.split(/[,\s]+/).map(s => s.trim()).filter(Boolean);
     pkgBtn.disabled = true;
     pkgStatus.textContent = 'Installing...';
     pkgStatus.style.color = 'var(--yellow)';
     const failed = [];
-    for (const pkg of pkgs){
-        try{
+    for (const pkg of pkgs) {
+        try {
             pkgStatus.textContent = `Installing ${pkg}...`;
             await micropip.install(pkg);
-            if(!installedPkgs.has(pkg)){
+            if (!installedPkgs.has(pkg)) {
                 installedPkgs.add(pkg);
                 const chip = document.createElement('span');
                 chip.className = 'pkg-chip';
@@ -884,7 +884,7 @@ async function installPackage(){
     }
     pkgBtn.disabled = false;
     pkgInput.value = '';
-    if(failed.length === 0){
+    if (failed.length === 0) {
         pkgStatus.textContent = `Installed ${pkgs.join(', ')}`;
         pkgStatus.style.color = 'var(--green)';
     } else {
@@ -894,7 +894,7 @@ async function installPackage(){
     setTimeout(() => { pkgStatus.textContent = ''; }, 4000);
 }
 
-async function resetEvn(){
+async function resetEvn() {
     if (!pyodide || isRunning) return;
     setStatus('Resetting...', 'warn');
     await pyodide.runPythonAsync(`
@@ -916,20 +916,20 @@ editor.addEventListener('input', () => { renderLineNumbers(); syncScroll(); });
 editor.addEventListener('scroll', syncScroll);
 
 editor.addEventListener('keydown', (e) => {
-    if(e.key === 'Tab'){
+    if (e.key === 'Tab') {
         e.preventDefault();
         const s = editor.selectionStart;
         editor.value = editor.value.slice(0, s) + '   ' + editor.value.slice(editor.selectionEnd);
-        editor.selectionStart =  editor.selectionEnd = s + 4;
+        editor.selectionStart = editor.selectionEnd = s + 4;
         renderLineNumbers();
         return;
     }
-    if (e.shiftKey && e.key === 'Enter'){
+    if (e.shiftKey && e.key === 'Enter') {
         e.preventDefault();
         runCode();
         return;
     }
-    if (e.key === 'Enter'){
+    if (e.key === 'Enter') {
         e.preventDefault();
         const text = editor.value;
         const pos = editor.selectionStart;
