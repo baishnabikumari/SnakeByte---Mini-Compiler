@@ -785,6 +785,76 @@ except Exception:
     pass
 `;
 
+//Run code
+async function runCode() {
+    if(!pyodide || isRunning) return;
+    isRunning = true;
+    runBtn.classList.add('running');
+    setStatus('Running...', 'run');
+    outputBox.textContent = '';
+    errorBox.textContent = '';
+    plotBox.innerHTML = '<div class="plot-empty"> Run Matplotlib code to see the plots here</div>';
+
+    const code = editor.value;
+    const t0 = performance.now();
+    let stdout_lines = [], stderr_lines = [], allPlots = [];
+
+    try{
+        await pyodide.loadPackageFromImports(code);
+
+        pyodide.setStdout({ batched: (line) => {
+            if (line.startWith('SNAKEBYTE_PLOT:')){
+                allPlots.push(line.slice('SNAKEBYTE_PLOT:'.length));
+            } else {
+                stdout_lines.push(line);
+            }
+        }});
+        pyodide.setStderr({ batched: (line) => stderr_lines.push(line) });
+
+        await pyodide.runPythonAsync(MATPLOTLIB_PREAMBLE);
+        await pyodide.runPythonAsync(code);
+        await pyodide.runPythonAsync(`_sb_capture_figures()`);
+
+        const elapsed = ((performance.now() -t0) / 1000).toFixed(3);
+        execTimeEl.textContent = `${elapsed}s`;
+        execTimeEl.style.display = 'inline';
+
+        outputBox.textContent = stdout_lines.join('\n').trimEnd() || '(no output)';
+        if (stderr_lines.length > 0) errorBox.textContent = stderr_lines.join('\n').trimEnd();
+
+        if (allPlots.length > 0){
+            plotBox.innerHTML = allPlots.map((b64, i) => `
+                <div class="plot-figures">
+                    ${allPlots.length > 1 ? `<div class="plot-label">Figure ${i + 1}</div>` : ''}
+                    <img src="data:image/png;base64,${b64}" alt='Figure ${i + 1}"/>
+                </div>`).join('');
+            switchTab('plot');
+        } else{
+            switchTab('output');
+        }
+
+        setStatus(`Done in ${elapsed}s ✓`);
+        await updateVarsPanel();
+    } catch (err) {
+        const elapsed = ((performance.now() - t0 / 1000).toFixed(3));
+        let msg = err.message || String(err);
+        if (msg.includes('Traceback')){
+            const lines = msg.split('\n');
+            const start = lines.findIndex(l => l.startWith('Traceback'));
+            if (start !== -1) msg = lines.slice(start).join('\n');
+        }
+        errorBox.textContent = msg;
+        if(stdout_lines.length > 0) outputBox.textContent = stdout_lines.join('\n');
+        switchTab('error');
+        setStatus('Error - ' + msg.split('\n').pop().trim(), 'error');
+    } finally {
+        isRunning = false;
+        runBtn.classList.remove('running');
+        pyodide.setStdout({ batched: () => {} });
+        pyodide.setStderr({ batched: () => {} });
+    }
+}
+
 async function initPyodide() {
     try {
         setBootProgress(10, 'Fetching Pyodide runtime (CPython 3.11)...');
