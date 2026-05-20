@@ -759,6 +759,32 @@ function escHtml(s){
         .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+//matplotlib preamble
+const MATPLOTLIB_PREAMBLE = `
+import sys as _sys, io as _io, base64 as _b64
+
+def _sb_capture_figure():
+    try:
+        import matplotlib.pyplot as _plt
+        for _n in _plt.get_fignums():
+            _fig = _plt.figure(n)
+            _buf = _io.BytessIO()
+            _fig.savefig(_but, format='png', dpi=110, bbox_inches='tight', facecolor=_fig.get_facecolor())
+            _buf.seek(0)
+            print(f"SNAKEBYTE_PLOT:{_b64.b64encode(_buf.read()).decode()}")
+            _buf.close()
+        _plt.close('all')
+    except Exception:
+        pass
+try:
+    import matplotlib as _mpl
+    _mpl.use('Agg')
+    import matplotlib.pyplot as _plt
+    _plt.show = _sb_capture_figures
+except Exception:
+    pass
+`;
+
 async function initPyodide() {
     try {
         setBootProgress(10, 'Fetching Pyodide runtime (CPython 3.11)...');
