@@ -894,6 +894,69 @@ async function installPackage(){
     setTimeout(() => { pkgStatus.textContent = ''; }, 4000);
 }
 
+async function resetEvn(){
+    if (!pyodide || isRunning) return;
+    setStatus('Resetting...', 'warn');
+    await pyodide.runPythonAsync(`
+_keep = {'__name__', '__doc__','__loader__','__spec__','__builtins__','__SnakeByteCapture__','_sb_stdout','_sb_stderr','sys','io','micropip'}
+for _k in [k for k in list(globals().keys()) if k not in _keep]:
+    del globals()[_k]
+`);
+    outputBox.textContent = '';
+    errorBox.textContent = '';
+    varsBox.innerHTML = '<div class="vars-empty">Environment reset. Variables cleared.</div>';
+    installedPkgs.clear();
+    pkgChips.innerHTML = '';
+    execTimeEl.style.display = 'none';
+    setStatus('Environment reset');
+}
+
+//editor event listner
+editor.addEventListener('input', () => { renderLineNumbers(); syncScroll(); });
+editor.addEventListener('scroll', syncScroll);
+
+editor.addEventListener('keydown', (e) => {
+    if(e.key === 'Tab'){
+        e.preventDefault();
+        const s = editor.selectionStart;
+        editor.value = editor.value.slice(0, s) + '   ' + editor.value.slice(editor.selectionEnd);
+        editor.selectionStart =  editor.selectionEnd = s + 4;
+        renderLineNumbers();
+        return;
+    }
+    if (e.shiftKey && e.key === 'Enter'){
+        e.preventDefault();
+        runCode();
+        return;
+    }
+    if (e.key === 'Enter'){
+        e.preventDefault();
+        const text = editor.value;
+        const pos = editor.selectionStart;
+        const lstart = text.lastIndexOf('\n', pos - 1) + 1;
+        const line = text.slice(lstart, pos).trimEnd();
+        const base = text.slice(lstart, pos).match(/^ +/)?.[0] || '';
+        let newLine = '\n' + base;
+        if (line.endWith(':')) newLine += '     ';
+        editor.value = text.slice(0, pos) + newLine + text.slice(pos);
+        editor.selectionStart = editor.selectionEnd = pos + newLine.length;
+        renderLineNumbers();
+    }
+});
+
+//button listner
+runBtn.addEventListener('click', runCode);
+clearBtn.addEventListener('click', () => {
+    outputBox.textContent = '';
+    errorBox.textContent = '';
+    plotBox.innerHTML = '<div class="plot-empty">Run matplotlib code to see the plots here</div>';
+    execTimeEl.style.display = 'none';
+    setStatus('Cleared.');
+});
+resetBtn.addEventListener('click', resetEvn);
+pkgBtn.addEventListener('click', installPackage);
+pkgInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') installPackage(); });
+
 async function initPyodide() {
     try {
         setBootProgress(10, 'Fetching Pyodide runtime (CPython 3.11)...');
