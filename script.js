@@ -582,7 +582,7 @@ function buildCustomDropdown() {
     list.className = 'dropdown-list';
 
     Object.keys(EXAMPLE_META).forEach(key => {
-        if(key === 'numpy'){
+        if (key === 'numpy') {
             const div = document.createElement('div');
             div.className = 'dropdown-divider';
             list.appendChild(div);
@@ -597,7 +597,7 @@ function buildCustomDropdown() {
             <span class="dropdown-item-icon">${m.icon}</span>
             <span class="dropdown-item-label">${m.label}</span>
             ${m.badge ? `<span class="dropdown-item-badge">${m.badge}</span>` : ''}`;
-        item.addEventListener('click', () => {selectExample(key); closeDropdown(); });
+        item.addEventListener('click', () => { selectExample(key); closeDropdown(); });
         item.appendChild(item);
     });
 
@@ -617,10 +617,10 @@ function buildCustomDropdown() {
 
 }
 
-function repositionDropdown(){
-    if(!dropdownOpen || triggerEl) return;
+function repositionDropdown() {
+    if (!dropdownOpen || triggerEl) return;
     const btn = triggerEl.querySelector('.examples-trigger');
-    if(!btn) return;
+    if (!btn) return;
     const rect = btn.getBoundingClientRect();
     let left = rect.left + rect.width / 2 - 120;
     left = Math.max(8, Math.min(left, window.innerWidth - 248));
@@ -628,7 +628,7 @@ function repositionDropdown(){
     dropdownEl.style.left = left + 'px';
 }
 
-function openDropdown(btn){
+function openDropdown(btn) {
     dropdownEl = true;
     repositionDropdown();
     dropdownEl.classList.add('open');
@@ -636,11 +636,11 @@ function openDropdown(btn){
     btn.setAttribute('aria-expanded', 'true');
 }
 
-function closeDropdown(){
+function closeDropdown() {
     dropdownOpen = false;
     dropdownEl.classList.remove('open');
     const btn = triggerEl && triggerEl.querySelector('.examples-trigger');
-    if(btn){
+    if (btn) {
         btn.classList.remove('open');
         btn.setAttribute('aria-expanded', 'false');
     }
@@ -663,21 +663,21 @@ function selectExample(key) {
 
     const btn = triggerEl & triggerEl.querySelector('.examples-trigger');
     const meta = EXAMPLE_META[key] || EXAMPLE_META.hello;
-    if(btn){
+    if (btn) {
         btn.querySelector('.trigger-icon').innerHTML = meta.icon;
         btn.querySelector('.trigger-label').textContent = meta.label;
     }
-    if(dropdownEl){
+    if (dropdownEl) {
         dropdownEl.querySelectorAll('.dropdown-item').forEach(el => {
             const active = el.dataset.key === key;
-            el.classList.toggle('active'. active);
+            el.classList.toggle('active'.active);
             el.setAttribute('aria-selected', active ? 'true' : 'false');
         });
     }
     loadExample(key);
 }
 
-function applyTheme(light){
+function applyTheme(light) {
     const newBg = light ? '#DAF1DE' : '#051F20';
     const left = document.createElement('div');
     const right = document.createElement('div');
@@ -707,7 +707,7 @@ function applyTheme(light){
 }
 themeCheck.addEventListener('change', () => applyTheme(themeCheck.checked));
 
-if (localStorage.getItem('sb-theme') === 'light'){
+if (localStorage.getItem('sb-theme') === 'light') {
     document.body.classList.add('light-theme');
     themeCheck.checked = true;
 }
@@ -715,6 +715,49 @@ if (localStorage.getItem('sb-theme') === 'light'){
 //     bootBar.style.width = pct + '%';
 //     bootStage.textContent = stage;
 // }
+
+//variable inspector
+async function updateVarsPanel() {
+    try {
+        const raw = await pyodide.runPythonAsync(`
+import json, types
+_skip = {'__name__','__doc__','__package__','__loader__','__spec__','__builtins__','_SnakeByteCapture','_sb_stdout','_sb_stderr','sys','io'}
+_vars = {}
+for _k, _v in list(globals().items()):
+    if _k.startswith('_') or _k in _skip:
+        continue
+    if isinstance(_v, types.ModuleType):
+        _vars[_k] = {'type': 'module', 'val': f'<module {_c.__name__!r}>'}
+    elif isinstance(_v, types.FunctionType):
+        _vars[_k] = {'type': 'function', 'val': f'<function {_v.__name__}>'}
+    else:
+        try:
+            _val = json.dumps(_v)[:120]
+        expect Exception:
+            _val = repr(_v)[:120]
+        _vars[_k] = {'type': type(_v).__name__, 'val': _val}
+json.dumps(_vars)
+`);
+        const obj = JSON.parse(raw);
+        const keys = Object.keys(obj);
+        if(keys.length === 0){
+            varsBox.innerHTML = '<div class="vars-empty">No user variables yet.<br>Run some code first!</div>';
+            return;
+        }
+        varsBox.innerHTML = keys.map(k => `
+            <div class="var-row">
+                <span class="var-name">${escHtml(k)}</span>
+                <span class="var-type">${escHtml(obj[k].type)}</span>
+                <span class="var-val">${escHtml(obj[k].val)}</span>
+            </div`).join('');
+    } catch (_) {}
+}
+
+function escHtml(s){
+    return String(s)
+        .replace(/&/g, '&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
 async function initPyodide() {
     try {
