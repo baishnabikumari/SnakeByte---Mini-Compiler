@@ -857,6 +857,43 @@ async function runCode() {
     }
 }
 
+//package installer
+async function installPackage(){
+    if(!micropip) return;
+    const raw = pkgInput.value.trim();
+    if(!raw) return;
+    const pkgs = raw.split(/[,\s]+/).map(s => s.trim()).filter(Boolean);
+    pkgBtn.disabled = true;
+    pkgStatus.textContent = 'Installing...';
+    pkgStatus.style.color = 'var(--yellow)';
+    const failed = [];
+    for (const pkg of pkgs){
+        try{
+            pkgStatus.textContent = `Installing ${pkg}...`;
+            await micropip.install(pkg);
+            if(!installedPkgs.has(pkg)){
+                installedPkgs.add(pkg);
+                const chip = document.createElement('span');
+                chip.className = 'pkg-chip';
+                chip.textContent = ` ${pkg}`;
+                pkgChips.appendChild(chip);
+            }
+        } catch (e) {
+            failed.push(pkg);
+        }
+    }
+    pkgBtn.disabled = false;
+    pkgInput.value = '';
+    if(failed.length === 0){
+        pkgStatus.textContent = `Installed ${pkgs.join(', ')}`;
+        pkgStatus.style.color = 'var(--green)';
+    } else {
+        pkgStatus.textContent = `Failed: ${failed.join(', ')}`;
+        pkgStatus.style.color = 'var(--red)';
+    }
+    setTimeout(() => { pkgStatus.textContent = ''; }, 4000);
+}
+
 async function initPyodide() {
     try {
         setBootProgress(10, 'Fetching Pyodide runtime (CPython 3.11)...');
