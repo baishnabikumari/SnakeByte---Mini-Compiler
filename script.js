@@ -555,7 +555,7 @@ function buildCustomDropdown() {
     const btn = document.createElement('button');
     btn.className = 'examples-trigger';
     btn.setAttribute('aria-haspopup', 'listbox');
-    btn.setAttribute('aria-expand', 'false');
+    btn.setAttribute('aria-expanded', 'false');
 
     const meta = EXAMPLE_META[currentExample] || EXAMPLE_META.hello;
     btn.innerHTML = `
@@ -570,7 +570,7 @@ function buildCustomDropdown() {
     </span>`;
 
     dropdownEl = document.createElement('div');
-    dropdownEl.className = 'example-dropdown';
+    dropdownEl.className = 'examples-dropdown';
     dropdownEl.setAttribute('role', 'listbox');
 
     const header = document.createElement('div');
@@ -598,7 +598,7 @@ function buildCustomDropdown() {
             <span class="dropdown-item-label">${m.label}</span>
             ${m.badge ? `<span class="dropdown-item-badge">${m.badge}</span>` : ''}`;
         item.addEventListener('click', () => { selectExample(key); closeDropdown(); });
-        item.appendChild(item);
+        list.appendChild(item);
     });
 
     dropdownEl.appendChild(list);
@@ -618,7 +618,7 @@ function buildCustomDropdown() {
 }
 
 function repositionDropdown() {
-    if (!dropdownOpen || triggerEl) return;
+    if (!dropdownOpen || !triggerEl) return;
     const btn = triggerEl.querySelector('.examples-trigger');
     if (!btn) return;
     const rect = btn.getBoundingClientRect();
@@ -629,7 +629,7 @@ function repositionDropdown() {
 }
 
 function openDropdown(btn) {
-    dropdownEl = true;
+    dropdownOpen = true;
     repositionDropdown();
     dropdownEl.classList.add('open');
     btn.classList.add('open');
@@ -661,7 +661,7 @@ function selectExample(key) {
     currentExample = key;
     if (exampleSelect) exampleSelect.value = key;
 
-    const btn = triggerEl & triggerEl.querySelector('.examples-trigger');
+    const btn = triggerEl && triggerEl.querySelector('.examples-trigger');
     const meta = EXAMPLE_META[key] || EXAMPLE_META.hello;
     if (btn) {
         btn.querySelector('.trigger-icon').innerHTML = meta.icon;
@@ -670,7 +670,7 @@ function selectExample(key) {
     if (dropdownEl) {
         dropdownEl.querySelectorAll('.dropdown-item').forEach(el => {
             const active = el.dataset.key === key;
-            el.classList.toggle('active'.active);
+            el.classList.toggle('active', active);
             el.setAttribute('aria-selected', active ? 'true' : 'false');
         });
     }
@@ -700,7 +700,7 @@ function applyTheme(light) {
         left.offsetHeight;
         left.classList.remove('covering');
         right.classList.remove('covering');
-        left.classList.remove('splitting');
+        left.classList.add('splitting');
         right.classList.add('splitting');
         setTimeout(() => { left.remove(); right.remove(); }, 500);
     }, 340);
@@ -727,13 +727,13 @@ for _k, _v in list(globals().items()):
     if _k.startswith('_') or _k in _skip:
         continue
     if isinstance(_v, types.ModuleType):
-        _vars[_k] = {'type': 'module', 'val': f'<module {_c.__name__!r}>'}
+        _vars[_k] = {'type': 'module', 'val': f'<module {_v.__name__!r}>'}
     elif isinstance(_v, types.FunctionType):
         _vars[_k] = {'type': 'function', 'val': f'<function {_v.__name__}>'}
     else:
         try:
             _val = json.dumps(_v)[:120]
-        expect Exception:
+        except Exception:
             _val = repr(_v)[:120]
         _vars[_k] = {'type': type(_v).__name__, 'val': _val}
 json.dumps(_vars)
@@ -749,7 +749,7 @@ json.dumps(_vars)
                 <span class="var-name">${escHtml(k)}</span>
                 <span class="var-type">${escHtml(obj[k].type)}</span>
                 <span class="var-val">${escHtml(obj[k].val)}</span>
-            </div`).join('');
+            </div>`).join('');
     } catch (_) { }
 }
 
@@ -763,13 +763,13 @@ function escHtml(s) {
 const MATPLOTLIB_PREAMBLE = `
 import sys as _sys, io as _io, base64 as _b64
 
-def _sb_capture_figure():
+def _sb_capture_figures():
     try:
         import matplotlib.pyplot as _plt
         for _n in _plt.get_fignums():
-            _fig = _plt.figure(n)
-            _buf = _io.BytessIO()
-            _fig.savefig(_but, format='png', dpi=110, bbox_inches='tight', facecolor=_fig.get_facecolor())
+            _fig = _plt.figure(_n)
+            _buf = _io.BytesIO()
+            _fig.savefig(_buf, format='png', dpi=110, bbox_inches='tight', facecolor=_fig.get_facecolor())
             _buf.seek(0)
             print(f"SNAKEBYTE_PLOT:{_b64.b64encode(_buf.read()).decode()}")
             _buf.close()
@@ -800,11 +800,11 @@ async function runCode() {
     let stdout_lines = [], stderr_lines = [], allPlots = [];
 
     try {
-        await pyodide.loadPackageFromImports(code);
+        await pyodide.loadPackagesFromImports(code);
 
         pyodide.setStdout({
             batched: (line) => {
-                if (line.startWith('SNAKEBYTE_PLOT:')) {
+                if (line.startsWith('SNAKEBYTE_PLOT:')) {
                     allPlots.push(line.slice('SNAKEBYTE_PLOT:'.length));
                 } else {
                     stdout_lines.push(line);
@@ -826,9 +826,9 @@ async function runCode() {
 
         if (allPlots.length > 0) {
             plotBox.innerHTML = allPlots.map((b64, i) => `
-                <div class="plot-figures">
+                <div class="plot-figure">
                     ${allPlots.length > 1 ? `<div class="plot-label">Figure ${i + 1}</div>` : ''}
-                    <img src="data:image/png;base64,${b64}" alt='Figure ${i + 1}"/>
+                    <img src="data:image/png;base64,${b64}" alt="Figure ${i + 1}"/>
                 </div>`).join('');
             switchTab('plot');
         } else {
@@ -838,16 +838,16 @@ async function runCode() {
         setStatus(`Done in ${elapsed}s ✓`);
         await updateVarsPanel();
     } catch (err) {
-        const elapsed = ((performance.now() - t0 / 1000).toFixed(3));
+        const elapsed = ((performance.now() - t0) / 1000).toFixed(3);
         let msg = err.message || String(err);
         if (msg.includes('Traceback')) {
             const lines = msg.split('\n');
-            const start = lines.findIndex(l => l.startWith('Traceback'));
+            const start = lines.findIndex(l => l.startsWith('Traceback'));
             if (start !== -1) msg = lines.slice(start).join('\n');
         }
         errorBox.textContent = msg;
         if (stdout_lines.length > 0) outputBox.textContent = stdout_lines.join('\n');
-        switchTab('error');
+        switchTab('errors');
         setStatus('Error - ' + msg.split('\n').pop().trim(), 'error');
     } finally {
         isRunning = false;
@@ -898,7 +898,7 @@ async function resetEvn() {
     if (!pyodide || isRunning) return;
     setStatus('Resetting...', 'warn');
     await pyodide.runPythonAsync(`
-_keep = {'__name__', '__doc__','__loader__','__spec__','__builtins__','__SnakeByteCapture__','_sb_stdout','_sb_stderr','sys','io','micropip'}
+_keep = {'__name__', '__doc__','__loader__','__spec__','__builtins__','_SnakeByteCapture','_sb_stdout','_sb_stderr','sys','io','micropip'}
 for _k in [k for k in list(globals().keys()) if k not in _keep]:
     del globals()[_k]
 `);
@@ -919,7 +919,7 @@ editor.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
         e.preventDefault();
         const s = editor.selectionStart;
-        editor.value = editor.value.slice(0, s) + '   ' + editor.value.slice(editor.selectionEnd);
+        editor.value = editor.value.slice(0, s) + '    ' + editor.value.slice(editor.selectionEnd);
         editor.selectionStart = editor.selectionEnd = s + 4;
         renderLineNumbers();
         return;
