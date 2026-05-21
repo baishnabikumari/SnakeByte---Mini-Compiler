@@ -185,36 +185,38 @@ print("upper: ", upper)
 print("Long: ", long_ones)`,
 
     classes: `class Animal:
-        def __init__(self, name, sound):
-            self.name = name
-            self.sound = sound
-        def speak(self):
-            return f"{self.name} says {self.sound}!"
-        def __repr__(self):
-            return f"<Animal name={self.name!r}>"
-        
-    class Dog(Animal):
-        def __init__(self, name):
-            super().__init__(name, "Woof")
-        
-        def fetch(self, item):
-            return f"{self.name} fetches the {item}!"
-    
-    class Cat(Animal):
-        def __init__(self, name):
-            super().__init__(name, "Meow")
-            
-        def ignore(self):
-            return f"{self.name} ignore you."
-            
-    animals = [Dog("Rex"), Cat("Whiskers"), Dog("Buddy")]
-    for a in animals:
-        print(a.speak())
-        
-    print()
-    print(animals[0].fetch("ball"))
-    print(animals[1].ignore())
-    print(repr(animals[2]))`,
+    def __init__(self, name, sound):
+        self.name = name
+        self.sound = sound
+
+    def speak(self):
+        return f"{self.name} says {self.sound}!"
+
+    def __repr__(self):
+        return f"<Animal name={self.name!r}>"
+
+class Dog(Animal):
+    def __init__(self, name):
+        super().__init__(name, "Woof")
+
+    def fetch(self, item):
+        return f"{self.name} fetches the {item}!"
+
+class Cat(Animal):
+    def __init__(self, name):
+        super().__init__(name, "Meow")
+
+    def ignore(self):
+        return f"{self.name} ignores you."
+
+animals = [Dog("Rex"), Cat("Whiskers"), Dog("Buddy")]
+for a in animals:
+    print(a.speak())
+
+print()
+print(animals[0].fetch("ball"))
+print(animals[1].ignore())
+print(repr(animals[2]))`,
 
     generators: `import itertools, time
         
@@ -289,16 +291,16 @@ print(" ", bubble_sort([64, 34, 25, 12, 22, 11, 90]))`,
 text = """
     My github: https://github.com/baishnabikumari
     My name: Baishnabi Kumari
-    Date Created: 2026-05-06
+    Date Created: 2026-05
 """
 
 github = re.findall(r'https?://github\.com/[A-Za-z0-9_-]+', text)
-name = re.findall(r'My name:\s*([^\n]+)', text)
-date_created = re.findall(r'Date Created:\s*(\d{4}-\d{2})', text)
+name = re.findall(r'My name:\\s*([^\\n]+)', text)
+date_created = re.findall(r'Date Created:\\s*(\\d{4}-\\d{2})', text)
 
-print("Github:", github)
-print("Name:", name)
-print("Date Created:", date_created)`,
+print("Github:", ', '.join(github))
+print("Name:", ', '.join(name))
+print("Date Created:", ', '.join(date_created))`,
 
     json: `import json, collections
 raw = '''
@@ -406,7 +408,7 @@ def fib_matrix(n):
 N = 30
 for name, fn in [("recursive", fib_recursive), ("iterative", fib_iterative),
                  ("memoized", fib_memoized), ("matrix", fib_matrix)]:
-    t = time.pref_counter()
+    t = time.perf_counter()
     result = fn(N)
     elapsed = (time.perf_counter() - t) * 1000
     print(f"{name:12s} fib({N}) = {result:8d} {elapsed:8.3f} ms")`,
@@ -937,7 +939,7 @@ editor.addEventListener('keydown', (e) => {
         const line = text.slice(lstart, pos).trimEnd();
         const base = text.slice(lstart, pos).match(/^ +/)?.[0] || '';
         let newLine = '\n' + base;
-        if (line.endWith(':')) newLine += '     ';
+        if (line.endsWith(':')) newLine += '     ';
         editor.value = text.slice(0, pos) + newLine + text.slice(pos);
         editor.selectionStart = editor.selectionEnd = pos + newLine.length;
         renderLineNumbers();
@@ -993,7 +995,7 @@ async function initPyodide() {
             selectExample(currentExample);
         }, 400);
     } catch (err) {
-        bootSplash.textContent = 'Failed to load: ' + err.message;
+        bootStage.textContent = 'Failed to load: ' + err.message;
         bootBar.style.background = 'var(--red)';
     }
 }
