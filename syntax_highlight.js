@@ -30,71 +30,76 @@ const THEMES = {
 
     dracula:{
         name: 'Dracula',
-        keyword: '', builtin: '', string: '',
-        comment: '', number: '', decorator: '',
-        operator: '', caret: '', swatch: '', accent: '',
+        keyword: '#FF79C6', builtin: '#8BE9FD', string: '#F1FABC',
+        comment: '#6272A4', number: '#BD93F9', decorator: '#FFBB6C',
+        operator: '#FF5555', caret: '#F8F8F2', swatch: '#282A36', accent: '#FF79C6',
     },
 
     monokai:{
-        name: 'Dracula',
-        keyword: '', builtin: '', string: '',
-        comment: '', number: '', decorator: '',
-        operator: '', caret: '', swatch: '', accent: '',
+        name: 'Monokai',
+        keyword: '#F92672', builtin: '#66D9E8', string: '#E6DB74',
+        comment: '#75715E', number: '#AE81FF', decorator: '#A6E22E',
+        operator: '#FD971F', caret: '#F8F8F2', swatch: '#272822', accent: '#A6E22E',
     },
 
     nord:{
-        name: 'Dracula',
-        keyword: '', builtin: '', string: '',
-        comment: '', number: '', decorator: '',
-        operator: '', caret: '', swatch: '', accent: '',
+        name: 'Nord',
+        keyword: '#81A1C1', builtin: '#88C0D0', string: '#A3BE8C',
+        comment: '#4C566A', number: '#B48EAD', decorator: '#EBCB9B',
+        operator: '#8FBCBB', caret: '#D8DEE9', swatch: '#2E3440', accent: '#88C0D0',
     },
 
     cyberpunk:{
-        name: 'Dracula',
-        keyword: '', builtin: '', string: '',
-        comment: '', number: '', decorator: '',
-        operator: '', caret: '', swatch: '', accent: '',
+        name: 'Cyberpunk',
+        keyword: '#FF00FF', builtin: '#00FFFF', string: '#FFFF00',
+        comment: '#555577', number: '#FF6600', decorator: '#FF0099',
+        operator: '#00FF99', caret: '#FF00FF', swatch: '#0D0D1A', accent: '#00FFFF',
     },
 
     sunset:{
-        name: 'Dracula',
-        keyword: '', builtin: '', string: '',
-        comment: '', number: '', decorator: '',
-        operator: '', caret: '', swatch: '', accent: '',
+        name: 'Sunset',
+        keyword: '#FF6B6B', builtin: '#FFE66D', string: '#A8E6CF',
+        comment: '#7A5C4A', number: '#FF8B94', decorator: '#FFAAA5',
+        operator: '#FF9F43', caret: '#FFE66D', swatch: '#1A0800', accent: '#FF6B6B',
     },
 
     galaxy:{
-        name: 'Dracula',
-        keyword: '', builtin: '', string: '',
-        comment: '', number: '', decorator: '',
-        operator: '', caret: '', swatch: '', accent: '',
+        name: 'Galaxy',
+        keyword: '#C792EA', builtin: '#82AAFF', string: '#C3E88D',
+        comment: '#546E7A', number: '#F78C6C', decorator: '#FFCB6B',
+        operator: '#89DDFF', caret: '#82AAFF', swatch: '#0F111A', accent: '#C792EA',
     },
 
     candy:{
-        name: 'Dracula',
-        keyword: '', builtin: '', string: '',
-        comment: '', number: '', decorator: '',
-        operator: '', caret: '', swatch: '', accent: '',
+        name: 'Candy',
+        keyword: '#FF69B4', builtin: '#87CEEB', string: '#98FB98',
+        comment: '#9B8B9B', number: '#FFD700', decorator: '#FF1493',
+        operator: '#DDA0DD', caret: '#FF69B4', swatch: '#1A0A1A', accent: '#FF69B4',
     },
 
     matrix:{
-        name: 'Dracula',
-        keyword: '', builtin: '', string: '',
-        comment: '', number: '', decorator: '',
-        operator: '', caret: '', swatch: '', accent: '',
+        name: 'Matrix',
+        keyword: '#00FF41', builtin: '#00CC33', string: '#008F11',
+        comment: '#004400', number: '#00FF41', decorator: '#39FF14',
+        operator: '#00CC33', caret: '#00FF41', swatch: '#000000', accent: '#00FF41',
     },
 
     rosegold:{
-        name: 'Dracula',
-        keyword: '', builtin: '', string: '',
-        comment: '', number: '', decorator: '',
-        operator: '', caret: '', swatch: '', accent: '',
+        name: 'Rosegold',
+        keyword: '#E8A09A', builtin: '#F5CBA7', string: '#ABEBC6',
+        comment: '#9B7B6B', number: '#F1948A', decorator: '#E59866',
+        operator: '#F0B27A', caret: '#E8A09A', swatch: '#1C0F0A', accent: '#E8A09A',
     },
 
     midnight:{
-        name: 'Dracula',
-        keyword: '', builtin: '', string: '',
-        comment: '', number: '', decorator: '',
-        operator: '', caret: '', swatch: '', accent: '',
+        name: 'Midnight',
+        keyword: '#7C83FD', builtin: '#96BAFF', string: '#6BFFB8',
+        comment: '#5D5D8A', number: '#FFC857', decorator: '#E9724C',
+        operator: '#C5C6C7', caret: '#7C83FD', swatch: '#0A0A1A', accent: '#7C83FD',
     },
 }
+
+//syntax highlighter
+const PYTHON_KEYWORDS = new Set([
+    
+])
