@@ -149,7 +149,7 @@ let dropdownEl = null;
 //examples codes
 const EXAMPLES = {
     hello: `# SnakeByte - a mini pyhton 3.11 compiler on your browser!
-print("Hello from Baishu")
+print("Hey there i am Baishnabi")
 print("Happy coding Hope you love this project")
 
 name = input.__doc__ and "SnakeByte" or "World"
