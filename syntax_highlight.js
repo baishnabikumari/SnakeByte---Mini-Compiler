@@ -22,8 +22,8 @@ const THEMES = {
             <circle cx="16" cy="11" r="5" fill="#F8C555" opacity="0.9"/>
             <line x1="16" y1="4" x2="16" y2="2" stroke="#F8C555" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
             <line x1="21" y1="6" x2="22.5" y2="4.5" stroke="#F8C555" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
-            <line x1="11" y1="6" x2="9.5" y2="4.5 stroke="#F8C555" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
-            <path d="M3 21 Q7 17 11 21 Q15 25 19 21 Q23 17 29 21" stroke="#79BBFF" stroke-width="2" stroke-linecap"round" fill="none"/>
+            <line x1="11" y1="6" x2="9.5" y2="4.5" stroke="#F8C555" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+            <path d="M3 21 Q7 17 11 21 Q15 25 19 21 Q23 17 29 21" stroke="#79BBFF" stroke-width="2" stroke-linecap="round" fill="none"/>
             <path d="M3 26 Q7 22 11 26 Q15 30 19 26 Q23 22 29 26" stroke="#79B8FF" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6"/>
         </svg>`,
     },
@@ -57,7 +57,8 @@ const THEMES = {
             <line x1="6" y1="16" x2="10" y2="16" stroke="#66D9E8" stroke-width="2" stroke-linecap="round"/>
             <line x1="22" y1="16" x2="26" y2="16" stroke="#66D9E8" stroke-width="2" stroke-linecap="round"/>
             <line x1="8.9" y1="8.9" x2="11.8" y2="11.8" stroke="#E6DB74" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="20.2" y1="20.2" x2="23.1" y2="23.1" stroke="#E6DB74" stroke-width="1.5" stroke-linecap="round"/>`
+            <line x1="20.2" y1="20.2" x2="23.1" y2="23.1" stroke="#E6DB74" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>`,
     },
 
     nord: {
@@ -65,15 +66,15 @@ const THEMES = {
         keyword: '#81A1C1', builtin: '#88C0D0', string: '#A3BE8C',
         comment: '#4C566A', number: '#B48EAD', decorator: '#EBCB9B',
         operator: '#8FBCBB', caret: '#D8DEE9', swatch: '#2E3440', accent: '#88C0D0',
-        svg: `<svg viewBox"0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        svg: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="16" cy="16" r="5" fill="#EBCB8B" opacity="0.95"/>
-            <line x1="16" y1="4" x2="16" y2="9" stroke="#88C0D0" stroke-width="2" stroke-linecap="round"/>,
-            <line x1="16" y1="23" x2="16" y2="28" stroke="#88C0D0" stroke-width="2" stroke-linecap="round"/>,
-            <line x1="4" y1="16" x2="9" y2="16" stroke="#88C0D0" stroke-width="2" stroke-linecap="round"/>,
-            <line x1="23" y1="16" x2="28" y2="16" stroke="#88C0D0" stroke-width="2" stroke-linecap="round"/>,
-            <line x1="7.8" y1="7.8" x2="11.2" y2="11.2" stroke="#81A1C1" stroke-width="1.5" stroke-linecap="round"/>,
-            <line x1="20.8" y1="20.8" x2="24.2" y2="24.2" stroke="#81A1C1" stroke-width="1.5" stroke-linecap="round"/>,
-            <line x1="24.2" y1="7.8" x2="20.8" y2="11.2" stroke="#81A1C1" stroke-width="1.5" stroke-liencap="round"/>,
+            <line x1="16" y1="4" x2="16" y2="9" stroke="#88C0D0" stroke-width="2" stroke-linecap="round"/>
+            <line x1="16" y1="23" x2="16" y2="28" stroke="#88C0D0" stroke-width="2" stroke-linecap="round"/>
+            <line x1="4" y1="16" x2="9" y2="16" stroke="#88C0D0" stroke-width="2" stroke-linecap="round"/>
+            <line x1="23" y1="16" x2="28" y2="16" stroke="#88C0D0" stroke-width="2" stroke-linecap="round"/>
+            <line x1="7.8" y1="7.8" x2="11.2" y2="11.2" stroke="#81A1C1" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="20.8" y1="20.8" x2="24.2" y2="24.2" stroke="#81A1C1" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="24.2" y1="7.8" x2="20.8" y2="11.2" stroke="#81A1C1" stroke-width="1.5" stroke-linecap="round"/>
             <line x1="11.2" y1="20.8" x2="7.8" y2="24.2" stroke="#81A1C1" stroke-width="1.5" stroke-linecap="round"/>
         </svg>`,
     },
@@ -125,7 +126,8 @@ const THEMES = {
             <circle cx="25" cy="23" r="0.8" fill="#C3E88D" opacity="0.65"/>
             <circle cx="24" cy="8" r="0.9" fill="#82AAFF" opacity="0.8"/>
             <circle cx="8" cy="24" r="1" fill="#C792EA" opacity="0.7"/>
-            <circle cx="27" cy="15" r="0.6" fill="#FFCB6B" opacity="0.8"/>`
+            <circle cx="27" cy="15" r="0.6" fill="#FFCB6B" opacity="0.8"/>
+        </svg>`,
     },
 
     candy: {
@@ -218,7 +220,7 @@ const TOKEN_REGEX = new RegExp([
 ].join('|'), 'g');
 
 function escapeHtml(text) {
-    return text.replace(/&/g, '&amp').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function highlightCode(code) {
@@ -244,7 +246,7 @@ function highlightCode(code) {
             else if (PY_BUILTINS.has(full)) highlightedOutput += `<i class="hl-b">${escapeHtml(full)}</i>`;
             else highlightedOutput += escapeHtml(full);
         }
-        else if (op) highlightedOutput += `<i class=hl-o">${escapeHtml(full)}</i>`;
+        else if (op) highlightedOutput += `<i class="hl-o">${escapeHtml(full)}</i>`;
         else highlightedOutput += escapeHtml(full);
     }
     if (lastIndex < code.length) highlightedOutput += escapeHtml(code.slice(lastIndex));
@@ -265,7 +267,7 @@ function injectCSS(){
         .hl-d { color: var(--hl-d); }
         .hl-o { color: var(--hl-o); }
 
-        #sb-h1-pre{
+        #sb-hl-pre{
             position: absolute;
             inset:0;
             margin:0;
@@ -324,7 +326,7 @@ function injectCSS(){
         #sb-theme-panel.open{ display: block; }
         
         .sb-tp-header{
-            font-size:10;
+            font-size:10px;
             font-weight:600;
             letter-spacing:0.1em;
             text-transform: uppercase;
@@ -365,7 +367,7 @@ function injectCSS(){
             transition: border-color 0.15s, transform 0.15s;
         }
         .sb-tp-icon svg { width: 28px; height: 28px; }
-        .sb-tp-item:hover .sb-tb-icon { transform: scale(1.07); }
+        .sb-tp-item:hover .sb-tp-icon { transform: scale(1.07); }
         .sb-tp-item.active .sb-tp-icon { border-color: rgba(255,255,255,0.5); }
         
         .sb-tp-name{
@@ -419,8 +421,8 @@ function setupOverlay(){
     const proto = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value');
     Object.defineProperty(editor, 'value', {
         get() {return proto.get.call(this);},
-        get(v){
-            proto.set.class(this, v);
+        set(v){
+            proto.set.call(this, v);
             requestAnimationFrame(updateHighlight);
         },
         configurable: true,
@@ -438,7 +440,7 @@ function updateHighlight(){
 
 let currentTheme = 'forest';
 
-function applyTheme(key){
+function applySyntaxTheme(key){
     const t = THEMES[key];
     if(!t) return;
     currentTheme = key;
@@ -488,20 +490,20 @@ function buildPicker(){
     panel.innerHTML = `<div class="sb-tp-header">⬡ colour themes</div>`;
 
     const grid = document.createElement('div');
-    grid.className = 'sb-tb-grid';
+    grid.className = 'sb-tp-grid';
 
     Object.entries(THEMES).forEach(([key, t]) => {
         const item = document.createElement('button');
-        item.className = 'sb-tb-item';
+        item.className = 'sb-tp-item';
         item.dataset.theme = key;
         item.title = t.name;
         item.innerHTML = `
-            <div class="sb-tb-icon" style="background:${t.swatch}; border-color:${t.accent}44>
+            <div class="sb-tp-icon" style="background:${t.swatch}; border-color:${t.accent}44">
                 ${t.svg}
             </div>
-            <span class="sb-tb-name>${t.name}</span>
+            <span class="sb-tp-name">${t.name}</span>
         `;
-        item.addEventListener('click', () => { applyTheme(key); closePanel(); });
+        item.addEventListener('click', () => { applySyntaxTheme(key); closePanel(); });
         grid.appendChild(item);
     });
 
@@ -532,7 +534,7 @@ function openPanel(btn){
 }
 
 function closePanel(){
-    document.getElementById('sb-hl-theme')?.classList.remove('open');
+    document.getElementById('sb-theme-panel')?.classList.remove('open');
 }
 
 //init
@@ -542,14 +544,14 @@ function init(){
     buildPicker();
 
     const saved = localStorage.getItem('sb-hl-theme');
-    applyTheme(saved && THEMES[saved] ? saved : 'forest');
+    applySyntaxTheme(saved && THEMES[saved] ? saved : 'forest');
 
     const lbl = document.getElementById('sb-theme-label');
     if(lbl) lbl.textContent = THEMES[currentTheme].name;
 }
 
-const appShell = document.getElementById('appShell');
-if(appShell && appShell.style.display !== 'none'){
+const _sbappShell = document.getElementById('appShell');
+if(_sbappShell && _sbappShell.style.display !== 'none'){
     setTimeout(init, 120);
 } else {
     const obs = new MutationObserver(() => {
