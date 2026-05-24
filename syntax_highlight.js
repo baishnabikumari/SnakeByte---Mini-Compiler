@@ -13,19 +13,20 @@ const THEMES = {
         </svg>`,
     },
 
-    ocean: {
-        name: 'Ocean',
-        keyword: '#79B8FF', builtin: '#B3D9FF', string: '#9ECBFF',
-        comment: '#5C7A8A', number: '#F8C555', decorator: '#61DAFB',
-        operator: '#7EC8E3', caret: '#58A6FF', swatch: '#0D1117', accent: '#79B8FF',
+    default: {
+        name: 'Default',
+        keyword: '#051F20', builtin: '#051F20', string: '#235347',
+        comment: '#051F20', number: '#051F20', decorator: '#051F20',
+        operator: '#051F20', caret: '#051F20', swatch: '#0D1117', accent: '#051F20',
         svg: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="11" r="5" fill="#F8C555" opacity="0.9"/>
-            <line x1="16" y1="4" x2="16" y2="2" stroke="#F8C555" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-            <line x1="21" y1="6" x2="22.5" y2="4.5" stroke="#F8C555" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
-            <line x1="11" y1="6" x2="9.5" y2="4.5" stroke="#F8C555" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
-            <path d="M3 21 Q7 17 11 21 Q15 25 19 21 Q23 17 29 21" stroke="#79BBFF" stroke-width="2" stroke-linecap="round" fill="none"/>
-            <path d="M3 26 Q7 22 11 26 Q15 30 19 26 Q23 22 29 26" stroke="#79B8FF" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6"/>
-        </svg>`,
+            <circle cx="16" cy="16" r="10" fill="#051F20" stroke="#8EB69B" stroke-width="1.2"/>
+            <circle cx="16" cy="16" r="5" fill="none" stroke="#5DCAA5" stroke-width="1"/>
+            <circle cx="16" cy="16" r="2" fill="#DAF1DE"/>
+            <line x1="16" y1="6" x2="16" y2="11" stroke="#8EB69B" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="16" y1="21" x2="16" y2="26" stroke="#8EB69B" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="6" y1="16" x2="11" y2="16" stroke="#8EB69B" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="21" y1="16" x2="26" y2="16" stroke="#8EB69B" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>`,
     },
 
     dracula: {
@@ -230,7 +231,7 @@ function highlightCode(code) {
 
     let match;
     while ((match = TOKEN_REGEX.exec(code)) !== null) {
-        if (match.index > lastIndex){
+        if (match.index > lastIndex) {
             highlightedOutput += escapeHtml(code.slice(lastIndex, match.index));
         }
         lastIndex = match.index + match[0].length;
@@ -241,7 +242,7 @@ function highlightCode(code) {
         else if (str) highlightedOutput += `<i class="hl-s">${escapeHtml(full)}</i>`;
         else if (deco) highlightedOutput += `<i class="hl-d">${escapeHtml(full)}</i>`;
         else if (num) highlightedOutput += `<i class="hl-n">${escapeHtml(full)}</i>`;
-        else if (ident){
+        else if (ident) {
             if (PYTHON_KEYWORDS.has(full)) highlightedOutput += `<i class="hl-k">${escapeHtml(full)}</i>`;
             else if (PY_BUILTINS.has(full)) highlightedOutput += `<i class="hl-b">${escapeHtml(full)}</i>`;
             else highlightedOutput += escapeHtml(full);
@@ -254,7 +255,7 @@ function highlightCode(code) {
 }
 
 //css
-function injectCSS(){
+function injectCSS() {
     const el = document.createElement('style');
     el.id = 'sb-themes-css';
     el.textContent = `
@@ -266,6 +267,47 @@ function injectCSS(){
         .hl-n { color: var(--hl-n); }
         .hl-d { color: var(--hl-d); }
         .hl-o { color: var(--hl-o); }
+
+        :root{
+            --sb-panel-bg :rgba(10,14,18,0.94);
+            --sb-panel-border:rgba(255,255,255,0.06);
+            --sb-panel-shadow:0 12px 40px rgba(0,0,0,0.6);
+            --sb-btn-border:rgba(142,182,155,0.35);
+            --sb-btn-hover-bg:rgba(142, 182, 155, 0.10);
+            --sb-btn-hover-border:rgba(142, 182, 155, 0.60);
+            --sb-header-color:#ffffff;
+            --sb-name-color:rgba(255, 255, 255, 0.50);
+            --sb-name-active:rgba(255, 255, 255, 0.90);
+            --sb-item-hover-bg:rgba(255, 255, 255, 0.07);
+        }
+
+        @media(prefers-color-scheme: light){
+            :root{
+                --sb-panel-bg :rgba(248, 250, 252, 0.97);
+                --sb-panel-border:rgba(0, 0, 0, 0.08);
+                --sb-panel-shadow:0 12px 40px rgba(0, 0, 0, 0.15);
+                --sb-btn-border:rgba(80, 140, 100, 0.40);
+                --sb-btn-hover-bg:rgba(80, 140, 100, 0.08);
+                --sb-btn-hover-border:rgba(80, 140, 100, 0.70);
+                --sb-header-color:#1a1a2e;
+                --sb-name-color:rgba(0, 0, 0, 0.45);
+                --sb-name-active:rgba(0, 0, 0, 0.85);
+                --sb-item-hover-bg:rgba(0, 0, 0, 0.05);
+            }
+        }
+        
+        body.light-theme{
+            --sb-panel-bg :rgba(248, 250, 252, 0.97);
+            --sb-panel-border:rgba(0, 0, 0, 0.08);
+            --sb-panel-shadow:0 12px 40px rgba(0, 0, 0, 0.15);
+            --sb-btn-border:rgba(80, 140, 100, 0.40);
+            --sb-btn-hover-bg:rgba(80,140,100,0.08);
+            --sb-btn-hover-border:rgba(80,140,100,0.70);
+            --sb-header-color:#1a1a2e;
+            --sb-name-color:rgba(0,0,0,0.45);
+            --sb-name-active:rgba(0,0,0,0.85);
+            --sb-item-hover-bg:rgba(0,0,0,0.05);
+        }
 
         #sb-hl-pre{
             position: absolute;
@@ -298,7 +340,7 @@ function injectCSS(){
             padding:0 14px;
             height:36px;
             border-radius:999px;
-            border: 1.5px solid rgba(142, 182, 155, 0.35);
+            border: 1.5px solid var(--sb-btn-border);
             background:transparent;
             cursor:pointer;
             font-size:12px;
@@ -307,8 +349,8 @@ function injectCSS(){
             transition:background 0.18s, border-color 0.18s;
         }
         #sb-theme-btn:hover{
-            background: rgba(142,182,155,0.1);
-            border-color:rgba(142,182,155,0.6);
+            background: var(--sb-btn-hover-bg);
+            border-color: var(--sb-btn-hover-border);
         }
         
         #sb-theme-panel{
@@ -318,8 +360,8 @@ function injectCSS(){
             padding: 18px 16px 14px;
             width:304px;
             display:none;
-            background:rgba(10,14,18,0.94);
-            box-shadow:0 12px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
+            background: var(--sb-panel-bg);
+            box-shadow: var(--sb-panel-shadow), 0 0 0 1px var(--sb-panel-border);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
         }
@@ -332,7 +374,7 @@ function injectCSS(){
             text-transform: uppercase;
             opacity: 0.4;
             margin-bottom: 14px;
-            color: #fff;
+            color: var(--sb-header-color);
         }
         
         .sb-tp-grid{
@@ -353,7 +395,7 @@ function injectCSS(){
             border-radius:10px;
             transition:background 0.15s;
         }
-        .sb-tp-item:hover{ background: rgba(255, 255, 255, 0.07); }
+        .sb-tp-item:hover{ background: var(--sb-item-hover-bg); }
         
         .sb-tp-icon{
             width: 44px;
@@ -372,14 +414,14 @@ function injectCSS(){
         
         .sb-tp-name{
             font-size: 9.5px;
-            color: rgba(255,255,255,0.5);
+            color: var(--sb-name-color);
             text-align: center;
             line-height: 1.2;
             transition: color 0.15s;
         }
         
         .sb-tp-item.active .sb-tp-name{
-            color: rgba(255,255,255,0.9);
+            color: var(--sb-name-active);
             font-weight: 600;
         }
     `;
@@ -389,12 +431,12 @@ function injectCSS(){
 //overlay
 let hlPre = null;
 
-function setupOverlay(){
+function setupOverlay() {
     const editor = document.getElementById('editor');
     if (!editor) return;
 
     const parent = editor.parentElement;
-    if(window.getComputedStyle(parent).position === 'static'){
+    if (window.getComputedStyle(parent).position === 'static') {
         parent.style.position = 'relative';
     }
 
@@ -420,8 +462,8 @@ function setupOverlay(){
 
     const proto = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value');
     Object.defineProperty(editor, 'value', {
-        get() {return proto.get.call(this);},
-        set(v){
+        get() { return proto.get.call(this); },
+        set(v) {
             proto.set.call(this, v);
             requestAnimationFrame(updateHighlight);
         },
@@ -430,7 +472,7 @@ function setupOverlay(){
     updateHighlight();
 }
 
-function updateHighlight(){
+function updateHighlight() {
     const editor = document.getElementById('editor');
     if (!editor || !hlPre) return;
     hlPre.innerHTML = highlightCode(editor.value) + '\n';
@@ -440,9 +482,9 @@ function updateHighlight(){
 
 let currentTheme = 'forest';
 
-function applySyntaxTheme(key){
+function applySyntaxTheme(key) {
     const t = THEMES[key];
-    if(!t) return;
+    if (!t) return;
     currentTheme = key;
 
     const r = document.documentElement;
@@ -454,26 +496,27 @@ function applySyntaxTheme(key){
     r.style.setProperty('--hl-d', t.decorator);
     r.style.setProperty('--hl-o', t.operator);
     r.style.setProperty('--sb-caret', t.caret);
+    r.style.setProperty('--sb-editor-bg', t.swatch);
 
     document.querySelectorAll('.sb-tp-item').forEach(el => {
         el.classList.toggle('active', el.dataset.theme === key);
     });
 
     const lbl = document.getElementById('sb-theme-label');
-    if(lbl) lbl.textContent = t.name;
+    if (lbl) lbl.textContent = t.name;
 
     updateHighlight();
     localStorage.setItem('sb-hl-theme', key);
 }
 
 //picker UI
-function buildPicker(){
+function buildPicker() {
     const runBtn = document.getElementById('runBtn');
-    if(!runBtn) return;
+    if (!runBtn) return;
 
     const btn = document.createElement('button');
     btn.id = 'sb-theme-btn';
-    btn.title = 'Switch theme';
+    //btn.title = 'Switch theme';
     btn.innerHTML = `
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none"
             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -496,7 +539,7 @@ function buildPicker(){
         const item = document.createElement('button');
         item.className = 'sb-tp-item';
         item.dataset.theme = key;
-        item.title = t.name;
+        //item.title = t.name;
         item.innerHTML = `
             <div class="sb-tp-icon" style="background:${t.swatch}; border-color:${t.accent}44">
                 ${t.svg}
@@ -517,14 +560,14 @@ function buildPicker(){
     document.addEventListener('click', closePanel);
     panel.addEventListener('click', e => e.stopPropagation());
     window.addEventListener('resize', () => {
-        if(panel.classList.contains('open')) openPanel(btn);
+        if (panel.classList.contains('open')) openPanel(btn);
     });
     runBtn.parentElement.insertBefore(btn, runBtn);
 }
 
-function openPanel(btn){
+function openPanel(btn) {
     const panel = document.getElementById('sb-theme-panel');
-    if(!panel) return;
+    if (!panel) return;
     const r = btn.getBoundingClientRect();
     let left = r.left + r.width / 2 - 152;
     left = Math.max(8, Math.min(left, window.innerWidth - 316));
@@ -533,30 +576,30 @@ function openPanel(btn){
     panel.classList.add('open');
 }
 
-function closePanel(){
+function closePanel() {
     document.getElementById('sb-theme-panel')?.classList.remove('open');
 }
 
 //init
-function init(){
+function init() {
     injectCSS();
     setupOverlay();
     buildPicker();
 
     const saved = localStorage.getItem('sb-hl-theme');
-    applySyntaxTheme(saved && THEMES[saved] ? saved : 'forest');
+    applySyntaxTheme(saved && THEMES[saved] ? saved : 'default');
 
     const lbl = document.getElementById('sb-theme-label');
-    if(lbl) lbl.textContent = THEMES[currentTheme].name;
+    if (lbl) lbl.textContent = THEMES[currentTheme].name;
 }
 
 const _sbappShell = document.getElementById('appShell');
-if(_sbappShell && _sbappShell.style.display !== 'none'){
+if (_sbappShell && _sbappShell.style.display !== 'none') {
     setTimeout(init, 120);
 } else {
     const obs = new MutationObserver(() => {
         const shell = document.getElementById('appShell');
-        if(shell && shell.style.display !== 'none'){
+        if (shell && shell.style.display !== 'none') {
             obs.disconnect();
             setTimeout(init, 120);
         }

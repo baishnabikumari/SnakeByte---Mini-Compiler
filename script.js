@@ -939,7 +939,7 @@ editor.addEventListener('keydown', (e) => {
         const line = text.slice(lstart, pos).trimEnd();
         const base = text.slice(lstart, pos).match(/^ +/)?.[0] || '';
         let newLine = '\n' + base;
-        if (line.endsWith(':')) newLine += '     ';
+        if (line.endsWith(':')) newLine += '    ';
         editor.value = text.slice(0, pos) + newLine + text.slice(pos);
         editor.selectionStart = editor.selectionEnd = pos + newLine.length;
         renderLineNumbers();

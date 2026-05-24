@@ -90,6 +90,15 @@ body.light-theme {
         radial-gradient(ellipse 40% 50% at 50% 100%, rgba(218, 241, 222, 0.5) 0%, transparent 55%);
 }
 
+body.light-theme .panel{
+    box-shadow: none;
+}
+
+body.light-theme .brand-mark{
+    background: linear-gradient(135deg, #8EB69B, #DAF1DE);
+    box-shadow: 0 8px 28px rgba(35, 83, 71, 0.20);
+}
+
 /*Noise overlay*/
 .noise-overlay {
     position: fixed;
@@ -946,11 +955,11 @@ body.light-theme .knob-icon-moon {
     position: relative;
     flex: 1;
     min-height: 0;
-    background: rgba(0, 0, 0, 0.22);
+    background: var(--sb-editor-bg), rgba(0, 0, 0, 0.22);
 }
 
 body.light-theme .editor-wrap {
-    background: rgba(218, 241, 222, 0.3);
+    background: var(--sb-editor-bg), rgba(218, 241, 222, 0.3);
 }
 
 textarea#editor {
