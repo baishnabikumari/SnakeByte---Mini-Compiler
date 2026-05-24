@@ -90,11 +90,11 @@ body.light-theme {
         radial-gradient(ellipse 40% 50% at 50% 100%, rgba(218, 241, 222, 0.5) 0%, transparent 55%);
 }
 
-body.light-theme .panel{
+body.light-theme .panel {
     box-shadow: none;
 }
 
-body.light-theme .brand-mark{
+body.light-theme .brand-mark {
     background: linear-gradient(135deg, #8EB69B, #DAF1DE);
     box-shadow: 0 8px 28px rgba(35, 83, 71, 0.20);
 }
