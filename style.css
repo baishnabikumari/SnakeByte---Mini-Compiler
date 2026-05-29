@@ -1574,7 +1574,7 @@ body.light-theme .vars-box {
 }
 
 .button{
-    --black-700: hsla(0 0% 12% / 1);
+    --black-700: var(--surface-2);
     --border_radius: 9999px;
     --transtion: 0.3s ease-in-out;
     --offset: 2px;
@@ -1614,10 +1614,10 @@ body.light-theme .vars-box {
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     width: 100%; height: 100%;
-    background-color: hsla(260 97% 61% / 0.75);
-    background-image: radial-gradient(at 51% 89%, hsla(266,45%,74%,1) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, hsla(266,36%,60%,1) 0px, transparent 50%),
-        radial-gradient(at 22% 91%, hsla(266,36%,60%,1) 0px, transparent 50%);
+    background-color: rgba(35, 83, 71, 0.75);
+    background-image: radial-gradient(at 51% 89%, rgba(142, 182, 155, 0.8) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(35,83,71,0.8) 0px, transparent 50%),
+        radial-gradient(at 22% 91%, rgba(11,43,38,0.9) 0px, transparent 50%);
     opacity: var(--active, 0);
     border-radius: var(--border_radius);
     transition: opacity var(--transtion);
@@ -1653,8 +1653,8 @@ body.light-theme .vars-box {
     transform-origin: left;
     width: 100%;
     height: 2rem;
-    background-color: white;
-    mask: linear-gradient(transparent 0%, white 120%);
+    background-color: var(--text-2);
+    mask: linear-gradient(transparent 0%, var(--text-2) 120%);
     animation: rotate 2s linear infinite;
 }
 
@@ -1663,6 +1663,13 @@ body.light-theme .vars-box {
     position: relative;
     z-index: 10;
     width: 1.75rem;
+}
+
+.button .sparkle .path{
+    fill: currentColor;
+    stroke: currentColor;
+    transform-origin: center;
+    color: var(--text);
 }
 
 .button:is(:hover, :focus) .sparkle .path{
@@ -1683,7 +1690,7 @@ body.light-theme .vars-box {
 .button .text_button{
     position: relative;
     z-index: 10;
-    background-image: linear-gradient(90deg, hsla(0 0% 100% / 1) 0%, hsla(0 0% 100% / var(--active, 0)) 120%);
+    background-image: linear-gradient(90deg, var(--text) 0%, var(--text-2) 120%);
     background-clip: text;
     font-size: 0.88rem;
     color: transparent;
