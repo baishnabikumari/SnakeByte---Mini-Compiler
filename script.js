@@ -1000,4 +1000,152 @@ async function initPyodide() {
     }
 }
 
+const intelliSenseBtn = document.getElementById('intelliSenseBtn');
+const isPopup = document.getElementById('isPopup');
+
+const PY_INTEL = [
+    { label: 'def', detail: 'Define a function', kind: 'keyword' },
+    { label: 'class', detail: 'Define a class', kind: 'keyword' },
+    { label: 'import', detail: 'Import a module', kind: 'keyword' },
+    { label: 'from', detail: 'Import from module', kind: 'keyword' },
+    { label: 'return', detail: 'Return a value', kind: 'keyword' },
+    { label: 'if', detail: 'conditional statement', kind: 'keyword' },
+    { label: 'elif', detail: 'Else if condition', kind: 'keyword' },
+    { label: 'else', detail: 'Else block', kind: 'keyword' },
+    { label: 'for', detail: 'For loop', kind: 'keyword' },
+    { label: 'while', detail: 'While loop', kind: 'keyword' },
+    { label: 'try', detail: 'Try block', kind: 'keyword' },
+    { label: 'except', detail: 'Catch exceptions', kind: 'keyword' },
+    { label: 'finally', detail: 'Always runs', kind: 'keyword' },
+    { label: 'with', detail: 'Context manager', kind: 'keyword' },
+    { label: 'lambda', detail: 'Anonymous function', kind: 'keyword' },
+    { label: 'yield', detail: 'Generator yield', kind: 'keyword' },
+    { label: 'pass', detail: 'Empty placeholder', kind: 'keyword' },
+    { label: 'break', detail: 'Break out of loop', kind: 'keyword' },
+    { label: 'continue', detail: 'Skip to next iteration', kind: 'keyword' },
+    { label: 'and', detail: 'Logical AND', kind: 'keyword' },
+    { label: 'or', detail: 'Logical OR', kind: 'keyword' },
+    { label: 'not', detail: 'Logical NOT', kind: 'keyword' },
+    { label: 'in', detail: 'Membership test', kind: 'keyword' },
+    { label: 'is', detail: 'Identity test', kind: 'keyword' },
+    { label: 'True', detail: 'Boolean true', kind: 'keyword' },
+    { label: 'False', detail: 'Boolean false', kind: 'keyword' },
+    { label: 'None', detail: 'Null value', kind: 'keyword' },
+    //builtins
+    { label: 'print()', detail: 'Print to console', kind: 'function' },
+    { label: 'len()', detail: 'Length of Object', kind: 'function' },
+    { label: 'range()', detail: 'Generate number range', kind: 'function' },
+    { label: 'input()', detail: 'read user input', kind: 'function' },
+    { label: 'int()', detail: 'convert to integer', kind: 'function' },
+    { label: 'str()', detail: 'convert to string', kind: 'function' },
+    { label: 'float()', detail: 'convert to float', kind: 'function' },
+    { label: 'list()', detail: 'create a list', kind: 'function' },
+    { label: 'dict()', detail: 'create a dictionary', kind: 'function' },
+    { label: 'tuple()', detail: 'create a tuple', kind: 'function' },
+    { label: 'set()', detail: 'create a set', kind: 'function' },
+    { label: 'type()', detail: 'Get type of object', kind: 'function' },
+    { label: 'isinstance()', detail: 'Check instance type', kind: 'function' },
+    { label: 'enumerate()', detail: 'Enumerate iterable', kind: 'function' },
+    { label: 'zip()', detail: 'Zip itetables together', kind: 'function' },
+    { label: 'map()', detail: 'Apply function to iterable', kind: 'function' },
+    { label: 'filter()', detail: 'Filter iterable', kind: 'function' },
+    { label: 'sorted()', detail: 'Return sorted list', kind: 'function' },
+    { label: 'reversed()', detail: 'Reverse an iterable', kind: 'function' },
+    { label: 'open()', detail: 'Open a file', kind: 'function' },
+    { label: 'abs()', detail: 'Absolute value', kind: 'function' },
+    { label: 'round()', detail: 'Round a number', kind: 'function' },
+    { label: 'max()', detail: 'Maximum value', kind: 'function' },
+    { label: 'min()', detail: 'Minimum value', kind: 'function' },
+    { label: 'sum()', detail: 'Sum of iterable', kind: 'function' },
+    { label: 'super', detail: 'Call parent class', kind: 'function' },
+    { label: 'hasattr', detail: 'Check attribute exists', kind: 'function' },
+    { label: 'getattr', detail: 'Get object attribute', kind: 'function' },
+    { label: 'setattr', detail: 'Set object attribute', kind: 'function' },
+    //snippets
+    { label: 'def __init__(self):', detail: 'Class constructor', kind: 'snippet'},
+    { label: 'if __name__ == "__main__":', detail: 'Main guard', kind: 'snippet'},
+    { label: '[x for x in iterable', detail: 'List comprehension', kind: 'snippet'},
+    { label: '{k: v for k, v in items()}', detail: 'Dict comprehension', kind: 'snippet'},
+    { label: 'try:\n    pass\nexcept Exception as e:', detail: 'Try/except block', kind: 'snippet'},
+    { label: 'with open("file") as f:', detail: 'File context manager', kind: 'snippet'},
+    { label: '@staticmethod', detail: 'Static method decorator', kind: 'snippet'},
+    { label: '@classmethod', detail: 'Class method decorator', kind: 'snippet'},
+    { label: '@property', detail: 'Property decorator', kind: 'snippet'},
+    //Variables
+    { label: 'self', detail: 'Instance reference', kind: 'variable'},
+    { label: 'args', detail: 'Positional arguments', kind: 'variable'},
+    { label: 'kwargs', detail: 'Keyword arguments', kind: 'variable'},
+    { label: '__name__', detail: 'Module name', kind: 'variable'},
+    { label: '__doc__', detail: 'Docstring', kind: 'variable'},
+];
+
+function getSuggestions(code, cursorPos){
+    const textToCursor = code.slice(0, cursorPos);
+    const wordMatch = textToCursor.match(/[\w.]*$/);
+    const currentWord = wordMatch ? wordMatch[0].toLowerCase() : '';
+
+    const userNames = [];
+    const funcMatches = code.matchAll(/def\s+(\w+)/g);
+    const classMatches = code.matchAll(/class\s+(\w+)/g);
+    const varMatches = code.matchAll(/^(\w+)\s*=/gm);
+    for (const m of funcMatches) userNames.push({ label: m[1] + '()', detail: 'User defined function', kind: 'function' });
+    for (const m of classMatches) userNames.push({ label: m[1], detail: 'User defined class', kind: 'variable' });
+    for (const m of varMatches) userNames.push({ label: m[1], detail: 'User defined variable', kind: 'variable'});
+
+    const all = [...PY_INTEL, ...userNames];
+    if (!currentWord) return all.slice(0, 5);
+
+    const filtered = all.filter(s =>
+        s.label.toLowerCase().startsWith(currentWord) && s.label.toLowerCase() !==currentWord
+    );
+    return filtered.slice(0, 5).length ? filtered.slice(0, 5) : all.slice(0, 5);
+}
+
+intelliSenseBtn.addEventListener('click', () => {
+    if(isPopup.style.display === 'block') { isPopup.style.display = 'none'; return; }
+    const suggestions = getSuggestions(editor.value, editor.selectionStart);
+    showISPopup(suggestions);
+});
+
+function showISPopup(suggestions){
+    if(!suggestions?.length) return;
+    const kindLabel = {function:'func', variable:'var', keyword:'kw', snippet:'snip'};
+
+    isPopup.innerHTML = `
+        <div class="is-popup-header"> IntelliSense Suggestions</div>
+        ${suggestions.map((s, i) => `
+            <div class="is-item" data-i="${i}">
+                <span class="is-kind is-kind-${s.kind}">${kindLabel[s.kind] || s.kind}</span>
+                <span class="is-label">${escHtml(s.label)}</span>
+                <span class="is-detail">${escHtml(s.detail)}</span>
+            </div>`).join('')}
+        <div class="is-popup-footer">Click to insert & Ecs to close</div>`;
+    
+        isPopup.querySelectorAll('.is-item').forEach((el, i) => {
+            el.addEventListener('click', () => {
+                const pos = editor.selectionStart;
+                const text = editor.value;
+                const wordMatch = text.slice(0, pos).match(/[\w.]*$/);
+                const wordStart = pos - (wordMatch?.[0]?.length || 0);
+                editor.value = text.slice(0, wordStart) + suggestions[i].label + text.slice(pos);
+                editor.selectionStart = editor.selectionEnd = wordStart + suggestions[i].label.length;
+                editor.focus();
+                renderLineNumbers();
+                isPopup.style.display = 'none';
+            });
+        });
+
+        const r = intelliSenseBtn.getBoundingClientRect();
+        isPopup.style.display = 'block';
+        isPopup.style.bottom = (window.innerHeight - r.top + 10) + 'px';
+        isPopup.style.right = (window.innerWidth - r.right) + 'px';
+        isPopup.style.left = 'auto';
+}
+
+document.addEventListener('keydown', e => {if (e.key === 'Escape') isPopup.style.display = 'none';});
+document.addEventListener('click', e => {
+    if(!isPopup.contains(e.target) && e.target !== intelliSenseBtn)
+        isPopup.style.display = 'none';
+});
+
 initPyodide();
