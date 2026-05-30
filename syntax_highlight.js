@@ -26,7 +26,12 @@ const THEMES = {
             <line x1="16" y1="21" x2="16" y2="26" stroke="#8EB69B" stroke-width="1.5" stroke-linecap="round"/>
             <line x1="6" y1="16" x2="11" y2="16" stroke="#8EB69B" stroke-width="1.5" stroke-linecap="round"/>
             <line x1="21" y1="16" x2="26" y2="16" stroke="#8EB69B" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>`,
+        </svg>`,
+        light: {
+            keyword: '#1A6B3C', builtin: '#2E7D52', string: '#276749',
+            comment: '#7A9E8A', number: '#0D5C38', decorator: '#1B5E3B',
+            operator: '#2C6B4A', caret: '#051F20',
+        },
     },
 
     dracula: {
@@ -488,17 +493,19 @@ function applySyntaxTheme(key) {
     currentTheme = key;
 
     const isLight = document.body.classList.contains('light-theme');
-    const override = (isLight && key === 'default') ? '#051F20' : null;
+    const syn = (isLight && key === 'default' && t.light)
+        ? { ...t, ...t.light}
+        : t;
 
     const r = document.documentElement;
-    r.style.setProperty('--hl-k', t.keyword);
-    r.style.setProperty('--hl-b', t.builtin);
-    r.style.setProperty('--hl-s', t.string);
-    r.style.setProperty('--hl-c', (isLight && key === 'default') ? '#5a8a6a' : t.comment);
-    r.style.setProperty('--hl-n', t.number);
-    r.style.setProperty('--hl-d', t.decorator);
-    r.style.setProperty('--hl-o', t.operator);
-    r.style.setProperty('--sb-caret', t.caret);
+    r.style.setProperty('--hl-k', syn.keyword);
+    r.style.setProperty('--hl-b', syn.builtin);
+    r.style.setProperty('--hl-s', syn.string);
+    r.style.setProperty('--hl-c', syn.comment);
+    r.style.setProperty('--hl-n', syn.number);
+    r.style.setProperty('--hl-d', syn.decorator);
+    r.style.setProperty('--hl-o', syn.operator);
+    r.style.setProperty('--sb-caret', syn.caret);
     r.style.setProperty('--sb-editor-bg', t.swatch);
 
     document.querySelectorAll('.sb-tp-item').forEach(el => {
