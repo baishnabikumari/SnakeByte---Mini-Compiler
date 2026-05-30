@@ -955,11 +955,11 @@ body.light-theme .knob-icon-moon {
     position: relative;
     flex: 1;
     min-height: 0;
-    background: var(--sb-editor-bg), rgba(0, 0, 0, 0.22);
+    background-color: var(--sb-editor-bg), rgba(0, 0, 0, 0.22);
 }
 
 body.light-theme .editor-wrap {
-    background: var(--sb-editor-bg), rgba(218, 241, 222, 0.3);
+    background-color: var(--sb-editor-bg), rgba(218, 241, 222, 0.3);
 }
 
 textarea#editor {
@@ -972,7 +972,7 @@ textarea#editor {
     outline: none;
     resize: none;
     background: transparent;
-    color: #a8d5b5;
+    color: #DAF1DE;
     font-family: var(--mono);
     font-size: 14px;
     line-height: 1.7;
@@ -984,6 +984,19 @@ textarea#editor {
 
 body.light-theme textarea#editor {
     color: #051F20;
+}
+
+body.light-theme .hl-k,
+body.light-theme .hl-b,
+body.light-theme .hl-s,
+body.light-theme .hl-n,
+body.light-theme .hl-d,
+body.light-theme .hl-o{
+    color: #051F20 !important;
+}
+
+body.light-theme .hl-c{
+    color: #5a8a6a !important;
 }
 
 .line-numbers {
@@ -1796,4 +1809,60 @@ body.light-theme .vars-box {
     color: var(--text-dim);
     border-top: 1px solid var(--border);
     text-align: center;
+}
+
+.is-status-dot{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-dim);
+    flex-shrink: 0;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.is-status-dot.is-dot-active{
+    background: #f43f5e;
+    box-shadow: 0 0 8px rgba(244,63,94,0.8);
+    animation: is-dot-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes is-dot-pulse{
+    0%, 100% {box-shadow: 0 0 6px rgba(244,63,94,00.6);}
+    50% {box-shadow: 0 0 14px rgba(244,63,94,1);}
+}
+
+/* toast */
+#is-toast{
+    position: fixed;
+    bottom: 80px;
+    right: 24px;
+    padding: 10px 18px;
+    border-radius: var(--radius-pill);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    z-index: 999999;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.25s, transform 0.25s;
+    pointer-events: none;
+}
+
+#is-toast.is-toast-show{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#is-toast.is-toast-on{
+    background: rgba(35,83,71,0.95);
+    color: #DAF1DE;
+    border: 1px solid rgba(142,182,155,0.3);
+    box-shadow: 0 8px 24px rgba(5, 31, 32, 0.4);
+}
+
+#is-toast.is-toast-off{
+    background: rgba(30,10,10,0.95);
+    color: #f87171;
+    border: 1px solid rgba(244,63,94,0.3);
+    box-shadow: 0 8px 24px rgba(244,63,94,0.2);
 }

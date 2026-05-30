@@ -15,9 +15,9 @@ const THEMES = {
 
     default: {
         name: 'Default',
-        keyword: '#051F20', builtin: '#051F20', string: '#235347',
-        comment: '#051F20', number: '#051F20', decorator: '#051F20',
-        operator: '#051F20', caret: '#051F20', swatch: '#0D1117', accent: '#051F20',
+        keyword: '#DAF1DE', builtin: '#DAF1DE', string: '#DAF1DE',
+        comment: '#5a8a6a', number: '#DAF1DE', decorator: '#DAF1DE',
+        operator: '#DAF1DE', caret: '#DAF1DE', swatch: '#051F20', accent: '#8EB69B',
         svg: `<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="16" cy="16" r="10" fill="#051F20" stroke="#8EB69B" stroke-width="1.2"/>
             <circle cx="16" cy="16" r="5" fill="none" stroke="#5DCAA5" stroke-width="1"/>
@@ -487,11 +487,14 @@ function applySyntaxTheme(key) {
     if (!t) return;
     currentTheme = key;
 
+    const isLight = document.body.classList.contains('light-theme');
+    const override = (isLight && key === 'default') ? '#051F20' : null;
+
     const r = document.documentElement;
     r.style.setProperty('--hl-k', t.keyword);
     r.style.setProperty('--hl-b', t.builtin);
     r.style.setProperty('--hl-s', t.string);
-    r.style.setProperty('--hl-c', t.comment);
+    r.style.setProperty('--hl-c', (isLight && key === 'default') ? '#5a8a6a' : t.comment);
     r.style.setProperty('--hl-n', t.number);
     r.style.setProperty('--hl-d', t.decorator);
     r.style.setProperty('--hl-o', t.operator);

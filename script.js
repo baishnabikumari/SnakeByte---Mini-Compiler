@@ -145,6 +145,7 @@ let currentExample = 'hello';
 let dropdownOpen = false;
 let triggerEl = null;
 let dropdownEl = null;
+let isIntelliSenseActive = false;
 
 //examples codes
 const EXAMPLES = {
@@ -697,6 +698,7 @@ function applyTheme(light) {
 
     setTimeout(() => {
         document.body.classList.toggle('light-theme', light);
+        applySyntaxTheme(currentTheme);
         themeCheck.checked = light;
         localStorage.setItem('sb-theme', light ? 'light' : 'dark');
         left.offsetHeight;
@@ -1102,13 +1104,22 @@ function getSuggestions(code, cursorPos){
 }
 
 intelliSenseBtn.addEventListener('click', () => {
-    if(isPopup.style.display === 'block') { isPopup.style.display = 'none'; return; }
-    const suggestions = getSuggestions(editor.value, editor.selectionStart);
-    showISPopup(suggestions);
-    positionPopupAtCursor();
+    isIntelliSenseActive = !isIntelliSenseActive;
+    isPopup.style.display = 'none';
+
+    const dot = document.getElementById('is-status-dot');
+    if(dot){
+        dot.classList.toggle('is-dot-active', isIntelliSenseActive);
+    }
+    showToast(isIntelliSenseActive ? 'IntelliSense Is Active' : 'IntelliSense Is Not Active', isIntelliSenseActive);
+    // if(isPopup.style.display === 'block') { isPopup.style.display = 'none'; return; }
+    // const suggestions = getSuggestions(editor.value, editor.selectionStart);
+    // showISPopup(suggestions);
+    // positionPopupAtCursor();
 });
 
 function triggerIntelliSense(){
+    if(!isIntelliSenseActive) return;
     const pos = editor.selectionStart;
     const text = editor.value;
     const textToCursor = text.slice(0, pos);
@@ -1181,5 +1192,18 @@ document.addEventListener('click', e => {
     if(!isPopup.contains(e.target) && e.target !== intelliSenseBtn)
         isPopup.style.display = 'none';
 });
+
+function showToast(msg, active){
+    let toast = document.getElementById('is-toast');
+    if(!toast){
+        toast = document.createElement('div');
+        toast.id = 'is-toast';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.className = 'is-toast-show ' + (active ? 'is-toast-on' : 'is-toast-off');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.className = '', 2200);
+}
 
 initPyodide();
