@@ -914,7 +914,7 @@ for _k in [k for k in list(globals().keys()) if k not in _keep]:
 }
 
 //editor event listner
-editor.addEventListener('input', () => { renderLineNumbers(); syncScroll(); });
+editor.addEventListener('input', () => { renderLineNumbers(); syncScroll(); triggerIntelliSense() });
 editor.addEventListener('scroll', syncScroll);
 
 editor.addEventListener('keydown', (e) => {
@@ -1105,7 +1105,46 @@ intelliSenseBtn.addEventListener('click', () => {
     if(isPopup.style.display === 'block') { isPopup.style.display = 'none'; return; }
     const suggestions = getSuggestions(editor.value, editor.selectionStart);
     showISPopup(suggestions);
+    positionPopupAtCursor();
 });
+
+function triggerIntelliSense(){
+    const pos = editor.selectionStart;
+    const text = editor.value;
+    const textToCursor = text.slice(0, pos);
+    const wordMatch = textToCursor.match(/[\w.]*$/);
+    const currentWord = wordMatch ? wordMatch[0] : '';
+    if (currentWord.length < 2){ isPopup.style.display = 'none'; return; }
+    const suggestions = getSuggestions(text, pos);
+    if(!suggestions.length){ isPopup.style.display = 'none'; return; }
+    showISPopup(suggestions);
+    positionPopupAtCursor();
+}
+
+function positionPopupAtCursor(){
+    const pos = editor.selectionStart;
+    const textToCursor = editor.value.slice(0, pos);
+    const lines = textToCursor.split('\n');
+    const lineNum = lines.length - 1;
+    const colNum = lines[lines.length - 1].length;
+
+    const editorRect = editor.getBoundingClientRect();
+    const lineHeight = 23.8;
+    const charWidth = 8.4;
+    const paddingTop = 16;
+    const paddingLeft = 58;
+
+    let top = editorRect.top + paddingTop + (lineNum + 1) * lineHeight - editor.scrollTop;
+    let left = editorRect.left + paddingLeft + colNum * charWidth;
+
+    if (left + 340 > window.innerHeight - 10) left = window.innerWidth - 350;
+    if (top + 220 > window.innerHeight - 10) top = top - 220 - lineHeight;
+
+    isPopup.style.top = top + 'px';
+    isPopup.style.left = left + 'px';
+    isPopup.style.bottom = 'auto';
+    isPopup.style.right = 'auto';
+}
 
 function showISPopup(suggestions){
     if(!suggestions?.length) return;
@@ -1134,12 +1173,7 @@ function showISPopup(suggestions){
                 isPopup.style.display = 'none';
             });
         });
-
-        const r = intelliSenseBtn.getBoundingClientRect();
         isPopup.style.display = 'block';
-        isPopup.style.bottom = (window.innerHeight - r.top + 10) + 'px';
-        isPopup.style.right = (window.innerWidth - r.right) + 'px';
-        isPopup.style.left = 'auto';
 }
 
 document.addEventListener('keydown', e => {if (e.key === 'Escape') isPopup.style.display = 'none';});
