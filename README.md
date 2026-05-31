@@ -17,6 +17,9 @@ A full-featured Python 3.11 IDE that will run all in the browser - no installati
 > 12 builtin examples - all running into the browser, powered by WebAssembly.
 
 ## ScreenShots and Demo's
+
+> Demo Link - https://bucolic-tanuki-1ce61e.netlify.app/
+
 <img width="1437" height="721" alt="Screenshot 2026-05-31 at 5 57 43 PM" src="https://github.com/user-attachments/assets/349a8c87-bc1f-4449-a0dc-71c1d63c9c87" />
 <img width="1440" height="718" alt="Screenshot 2026-05-31 at 5 57 57 PM" src="https://github.com/user-attachments/assets/0697a28d-ee85-4898-bdc4-e56813626b21" />
 <img width="1440" height="719" alt="Screenshot 2026-05-31 at 5 58 06 PM" src="https://github.com/user-attachments/assets/0385fbe1-82fc-4e12-b770-25f40994947f" />
