@@ -1,5 +1,16 @@
 'use strict';
 
+const PAIRS = { '(':')', '[':']', '{':'}', '"':'"', "'":"'", '`':'`' };
+const CLOSERS = new Set([')', ']', '}', '"', "'", '`']);
+
+function applyEdit(newValue, newCursorStart, newCursorEnd = newCursorStart){
+    editor.value = newValue;
+    editor.selectionStart = newCursorStart;
+    editor.selectionEnd = newCursorEnd;
+    renderLineNumbers();
+    updateHighlight();
+}
+
 const ICONS = {
     hello: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="2,5 6,8 2,11"/>
@@ -920,30 +931,132 @@ editor.addEventListener('input', () => { renderLineNumbers(); syncScroll(); trig
 editor.addEventListener('scroll', syncScroll);
 
 editor.addEventListener('keydown', (e) => {
+
+    if (isPopup.style.display === 'block') {
+        const items = isPopup.querySelectorAll('.is-item');
+        let active = isPopup.querySelector('.is-item.is-active');
+        let idx = active ? parseInt(active.dataset.i) : -1;
+        if(e.key === 'ArrowDown') { e.preventDefault(); idx = (idx+1)%items.length; items.forEach(el=>el.classList.remove('is-active')); items[idx].classList.add('is-active');return; }
+        if(e.key === 'ArrowUp') {e.preventDefault(); idx = (idx-1+items.length)%items.length; items.forEach(el=>el.classList.remove('is-active')); items[idx].classList.add('is-active'); return; }
+        if((e.key === 'Enter' || e.key === 'Tab') && active) {e.preventDefault(); active.click(); return; }
+        if (e.key === 'Escape') { isPopup.style.display = 'none'; return; }
+    }
+
+    if(e.shiftKey && e.key === 'Enter') {e.preventDefault(); runCode(); return; }
+
+    const text = editor.value;
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    const hasSelection = start !== end;
+
+    //Tab
     if (e.key === 'Tab') {
         e.preventDefault();
-        const s = editor.selectionStart;
-        editor.value = editor.value.slice(0, s) + '    ' + editor.value.slice(editor.selectionEnd);
+        const s = start;
+        editor.value = text.slice(0, s) + '    ' + text.slice(end);
         editor.selectionStart = editor.selectionEnd = s + 4;
         renderLineNumbers();
         return;
     }
+
+    // shift+enter(run code)
     if (e.shiftKey && e.key === 'Enter') {
         e.preventDefault();
         runCode();
         return;
     }
-    if (e.key === 'Enter') {
+
+    //ctrl+/ (comment)
+    if((e.ctrlKey || e.metaKey) && e.key === '/'){
         e.preventDefault();
-        const text = editor.value;
-        const pos = editor.selectionStart;
-        const lstart = text.lastIndexOf('\n', pos - 1) + 1;
-        const line = text.slice(lstart, pos).trimEnd();
-        const base = text.slice(lstart, pos).match(/^ +/)?.[0] || '';
+        toggleComment();
+        return;
+    }
+
+    //ctrl+L(select line)
+    if((e.ctrlKey || e.metaKey) && e.key === '1'){
+        e.preventDefault();
+        selectCurrentLine();
+        return;
+    }
+
+    //ctrl+D(next occur)
+    if((e.ctrlKey || e.metaKey) && e.key === 'd') {
+        e.preventDefault();
+        selectNextOccurrence();
+        return;
+    }
+
+    //shift+alt+done (duplicate line)
+    if(e.shiftKey && e.altKey && e.key === 'ArrowDown'){
+        e.preventDefault();
+        duplicateLine();
+        return;
+    }
+
+    if (e.altKey && e.key === 'ArrowUp') { e.preventDefault(); moveLine(-1); return; }
+    if (e.altKey && e.key === 'ArrowDown') { e.preventDefault(); moveLine(1); return; }
+
+    if (PAIRS[e.key]){
+        e.preventDefault();
+        const open = e.key, close = PAIRS[open];
+        if(hasSelection){
+            const sel = text.slice(start, end);
+            editor.value = text.slice(0, start) + open + sel + close + text.slice(end);
+            editor.selectionStart = start + 1;
+            editor.selectionEnd = end + 1;
+        } else {
+            editor.value = text.slice(0, start) + open + close + text.slice(end);
+            editor.selectionStart = editor.selectionEnd = start + 1;
+        }
+        renderLineNumbers();
+        return;
+    }
+    if(CLOSERS.has(e.key) && text[start] === e.key && !hasSelection){
+        e.preventDefault();
+        editor.selectionStart = editor.selectionEnd = start + 1;
+        return;
+    }
+    if(e.key === 'Backspace' && !hasSelection){
+        const before = text[start - 1], after = text[start];
+        if(PAIRS[before] === after){
+            e.preventDefault();
+            editor.value = text.slice(0, start - 1) + text.slice(start + 1);
+            editor.selectionStart = editor.selectionEnd = start - 1;
+            renderLineNumbers();
+            return;
+        }
+        const lstart = text.lastIndexOf('\n', start - 1) + 1;
+        const indent = text.slice(lstart, start).match(/^(\s+)/)?.[1] || '';
+        if(indent.length > 0 && start === lstart + indent.length && indent.length % 4 === 0){
+            e.preventDefault();
+            editor.value = text.slice(0, start - 4) + text.slice(start);
+            editor.selectionStart = editor.selectionEnd = start - 4;
+            renderLineNumbers();
+            return;
+        }
+    }
+    if(e.key === 'Enter'){
+        e.preventDefault();
+        const lstart = text.lastIndexOf('\n', start - 1) + 1;
+        const line = text.slice(lstart, start).trimEnd();
+        const base = text.slice(lstart, start).match(/^ */)?.[0] || '';
+        const before = text[start - 1];
+        const after = text[start];
+
+        //expand
+        if((before === '{' && after === '}') || (before === '(' && after === ')')) {
+            const inner = '\n' + base + '   \n' + base;
+            editor.value = text.slice(0, start) + inner + text.slice(end);
+            editor.selectionStart = editor.selectionEnd = start + base.length + 5;
+            renderLineNumbers();
+            return;
+        }
         let newLine = '\n' + base;
         if (line.endsWith(':')) newLine += '    ';
-        editor.value = text.slice(0, pos) + newLine + text.slice(pos);
-        editor.selectionStart = editor.selectionEnd = pos + newLine.length;
+
+        editor.value = text.slice(0, start) + newLine + text.slice(end);
+        editor.selectionStart = editor.selectionEnd = start + newLine.length;
         renderLineNumbers();
     }
 });
@@ -1204,6 +1317,72 @@ function showToast(msg, active){
     toast.className = 'is-toast-show ' + (active ? 'is-toast-on' : 'is-toast-off');
     clearTimeout(toast._t);
     toast._t = setTimeout(() => toast.className = '', 2200);
+}
+
+function toggleComment(){
+    const text = editor.value;
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    const lstart = text.lastIndexOf('\n', start - 1) + 1;
+    const lend = text.indexOf('\n', end);
+    const block = text.slice(lstart, lend === -1 ? text.length : lend);
+    const lines = block.split('\n');
+    const allCommented = lines.every(l => l.trimStart().startsWith('#'));
+    const newLines = allCommented
+        ? lines.map(l => l.replace(/^(\s*)# ?/, '$1'))
+        : lines.map(l => l.replace(/^(\s*)/, '$1# '));
+    const newBlock = newLines.join('\n');
+    const realEnd = lend === -1 ? text.length : lend;
+    editor.value = text.slice(0, lstart) + newBlock + text.slice(realEnd);
+    editor.selectionStart = lstart;
+    editor.selectionEnd = lstart + newBlock.length;
+    renderLineNumbers();
+}
+function duplicateLine(){
+    const text = editor.value;
+    const start = editor.selectionStart;
+    const lstart = text.lastIndexOf('\n', start - 1) + 1;
+    const lend = text.indexOf('\n', start);
+    const line = text.slice(lstart, lend === -1 ? text.length : lend);
+    const insertAt = lend === -1 ? text.length : lend;
+    editor.value = text.slice(0, insertAt) + '\n' + line + text.slice(insertAt);
+    editor.selectionStart = editor.selectionEnd = insertAt + 1 + (start - lstart);
+    renderLineNumbers();
+}
+function moveLine(dir){
+    const text = editor.value;
+    const start = editor.selectionStart;
+    const lines = text.split('\n');
+    let pos = 0, lineIdx = 0;
+    for(let i = 0; i < lines.length; i++){
+        if (pos + lines[i].length >= start) { lineIdx = i; break; }
+        pos += lines[i].length + 1;
+    }
+    const target = lineIdx + dir;
+    if(target < 0 || target >= lines.length) return;
+    [lines[lineIdx], lines[target]] = [lines[target], lines[lineIdx]];
+    editor.value = lines.join('\n');
+    let newPos = 0;
+    for(let i = 0; i < target; i++) newPos += lines[i].length + 1;
+    newPos += (start - pos);
+    editor.selectionStart = editor.selectionEnd = newPos;
+    renderLineNumbers();
+}
+function selectNextOccurrence(){
+    const text = editor.value;
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    const word = end > start ? text.slice(start, end) : (() => {
+        const l = text.slice(0, start).match(/\w+$/)?.[0] || '';
+        const r = text.slice(start).match(/^\w+/)?.[0] || '';
+        return l + r;
+    })();
+    if (!word) return;
+    const searchForm = end > start ? end : start - (text.slice(0, start).match(/\w+$/)?.[0]?.length || 0) + word.length;
+    const idx = text.indexOf(word, searchForm);
+    if(idx === -1) return;
+    editor.selectionStart = idx;
+    editor.selectionEnd = idx + word.length;
 }
 
 initPyodide();
