@@ -1,4 +1,7 @@
 # SnakeByte - full CPyhton 3.11 Compiler in the Browser.
+<div align="center">
+<img width="237" height="58" alt="Screenshot 2026-05-31 at 5 52 24 PM" src="https://github.com/user-attachments/assets/8c4afd4d-08cd-42ee-963c-88d5434e6849" />
+</div>
 
 <div align="center">
 
@@ -12,6 +15,16 @@ A full-featured Python 3.11 IDE that will run all in the browser - no installati
 > A dark and light theme Python IDE featuring real Syntax Highlighting, also with a variable inspector,
 > Matplotlib plots rendering, IntelliSense(Suggestions), a livee pip installer.
 > 12 builtin examples - all running into the browser, powered by WebAssembly.
+
+## ScreenShots and Demo's
+<img width="1437" height="721" alt="Screenshot 2026-05-31 at 5 57 43 PM" src="https://github.com/user-attachments/assets/349a8c87-bc1f-4449-a0dc-71c1d63c9c87" />
+<img width="1440" height="718" alt="Screenshot 2026-05-31 at 5 57 57 PM" src="https://github.com/user-attachments/assets/0697a28d-ee85-4898-bdc4-e56813626b21" />
+<img width="1440" height="719" alt="Screenshot 2026-05-31 at 5 58 06 PM" src="https://github.com/user-attachments/assets/0385fbe1-82fc-4e12-b770-25f40994947f" />
+<img width="1440" height="717" alt="Screenshot 2026-05-31 at 5 58 17 PM" src="https://github.com/user-attachments/assets/85b5d9ae-6710-4095-b73e-e553a5906bbd" />
+<img width="637" height="509" alt="Screenshot 2026-05-31 at 5 58 26 PM" src="https://github.com/user-attachments/assets/c5707194-6fa8-4732-8f87-f0837800249c" />
+<img width="780" height="51" alt="Screenshot 2026-05-31 at 5 58 45 PM" src="https://github.com/user-attachments/assets/1725cf3a-d0a4-4a81-a2c6-0a4a1abb25ad" />
+<img width="288" height="179" alt="Screenshot 2026-05-31 at 5 59 34 PM" src="https://github.com/user-attachments/assets/46a3e167-7c71-487c-9080-02ebc60eb808" />
+<img width="288" height="164" alt="Screenshot 2026-05-31 at 5 59 44 PM" src="https://github.com/user-attachments/assets/b5107c0d-3107-4360-8d12-886ac0fdf8da" />
 
 ## What is the SnakeByte?
 Basically, it is a **non-dependent, serverless Python IDE**, Entirely Built with Pure HTML, CSS and JavaScript. It boots at real time with **Python 3.11** interpreter inside your browser using [Pyodide](https://pyodide.org) + WebAssembly - it gives you a high grade production Python environment without touching your terminal.
@@ -55,13 +68,14 @@ Defined in `script.js` -> `runCode()`, the execution works as follows:
 
 ---
 
-### pip Install Bar
+### Pip Install Bar
 The package bar at the top of the UI lets you install any PyPI package at runtime...
 - Powered by **Micropip**
 - Supports comma or space-seperated pacakage lists.
 - Installed packages will shown in the bar only.
 - Failed installations will be indicated by red status text.
 - Status messages auto cleared after 4 secs.
+<img width="1418" height="71" alt="Screenshot 2026-05-31 at 5 55 58 PM" src="https://github.com/user-attachments/assets/a85a37bf-4629-42ea-9988-2d974faf888c" />
 
 ---
 
@@ -78,6 +92,8 @@ It is the `syntax_highlight.js`, which is the single-pass tokenizer powered by a
 | 5 | Keywords | `.hl-k` | `def`, `class`, `yield`, `with` |
 | 6 | Builtins | `.hl-b` | `print()`, `len()`, `range()` |
 | 7 | Operators | `.hl-o` | `+`, `==`, `**`, `//` |
+<img width="302" height="288" alt="Screenshot 2026-05-31 at 5 56 41 PM" src="https://github.com/user-attachments/assets/3e448219-37ae-403e-997b-783977175774" />
+
 
 The Highlighter overlays a `<pre>` element sitting **behind** the transparent `<textarea>`.
 Also, the colors are driven by the CSS custom properties (`--hl-k`, `--hl-s`, etc.), this means that the theme will switch instantly and with zero re-tokenization.
@@ -179,7 +195,7 @@ On completion the boot splash fades out with a scale-up exit animation, and The 
 ---
 
 ### 12 Built-in code Examples
-
+<img width="241" height="587" alt="Screenshot 2026-05-31 at 5 55 15 PM" src="https://github.com/user-attachments/assets/0cd87e35-4d53-4c29-acc5-727c5d24e1ca" />
 
 ---
 
