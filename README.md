@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 # SnakeByte - full CPyhton 3.11 Compiler in the Browser.
 <div align="center">
 <img width="237" height="58" alt="Screenshot 2026-05-31 at 5 52 24 PM" src="https://github.com/user-attachments/assets/8c4afd4d-08cd-42ee-963c-88d5434e6849" />
 </div>
-=======
-# SnakeByte - full CPython 3.11 Compiler in the Browser.
->>>>>>> 358f107 (fixed all the bugs and typos also some major issues with the buttons and the code editor panel and more issues with the themes  and cursor auto next line and more, all are now fixed)
 
 <div align="center">
 
