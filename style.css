@@ -955,11 +955,12 @@ body.light-theme .knob-icon-moon {
     position: relative;
     flex: 1;
     min-height: 0;
-    background-color: var(--sb-editor-bg), rgba(0, 0, 0, 0.22);
+    overflow: hidden;
+    background-color: var(--sb-editor-bg, rgba(0, 0, 0, 0.22));
 }
 
 body.light-theme .editor-wrap {
-    background-color: var(--sb-editor-bg), rgba(218, 241, 222, 0.3);
+    background-color: var(--sb-editor-bg, rgba(218, 241, 222, 0.3));
 }
 
 textarea#editor {
@@ -1013,9 +1014,14 @@ body.light-theme .hl-c{
     line-height: 1.7;
     text-align: right;
     pointer-events: none;
-    overflow: hidden;
+    overflow: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     white-space: pre;
     user-select: none;
+}
+.line-numbers::-webkit-scrollbar{
+    display: none;
 }
 
 body.light-theme .line-numbers {
@@ -1580,10 +1586,10 @@ body.light-theme .vars-box {
 }
 
 #intelliSenseBtn{
-    position: absolute;
-    bottom: 4.3px;
-    right: 16px;
-    z-index: 100;
+    position: fixed;
+    bottom: 4px;
+    right: 20px;
+    z-index: ß9999;
 }
 
 .button{
@@ -1614,9 +1620,9 @@ body.light-theme .vars-box {
     height: 100%;
     background-color: var(--black-700);
     border-radius: var(--border_radius);
-    box-shadow: inset 0 0.5px hsl(0,0%,100), inset 0 -1px 2px 0 hsl(0,0%,0%),
+    box-shadow: inset 0 0.5px hsl(0,0%,100%), inset 0 -1px 2px 0 hsl(0,0%,0%),
         0px 4px 10px -4px hsla(0 0% 0% / calc(1 - var(--active))),
-        0 0 0 calc(var(--active, 0) * 0.36rem) hsl(200 97% 50% / 0.75);
+        0 0 0 calc(var(--active, 0) * 0.1rem) rgba(142, 182, 155, 0.75);
     transition: all var(--transtion);
     z-index: 0;
 }

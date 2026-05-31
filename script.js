@@ -160,7 +160,7 @@ let isIntelliSenseActive = false;
 
 //examples codes
 const EXAMPLES = {
-    hello: `# SnakeByte - a mini pyhton 3.11 compiler on your browser!
+    hello: `# SnakeByte - a mini python 3.11 compiler on your browser!
 print("Hey there i am Baishnabi")
 print("Happy coding Hope you love this project")
 
@@ -184,12 +184,12 @@ print(f"sin(π/6) = {math.sin(math.pi/6):.6f}")`,
 squares = [x**2 for x in range(1, 11)]
 evens = [x for x in range(20) if x % 2 == 0]
 matrix = [[i * j for j in range(1, 4)] for i in range(1, 4)]
-words = ["snake", "byte", "pyhton", "wasm"]
+words = ["snake", "byte", "python", "wasm"]
 upper = list(map(str.upper, words))
 long_ones = list(filter(lambda w: len(w) > 4, words))
 
-print("Square: ", squares)
-print("Events: ", evens)
+print("Squares: ", squares)
+print("Evens: ", evens)
 print("Matrix:")
 for row in matrix:
     print(" ", row)
@@ -376,7 +376,7 @@ class BankAccount:
     
 with BankAccount("Alice", 1000) as acc:
     acc.deposit(500).withdraw(200)
-    print(f"BalanceL: £{acc.balance:.2f}")
+    print(f"Balance: £{acc.balance:.2f}")
     try:
         acc.withdraw(5000)
     except InsufficientFundsError as e:
@@ -439,7 +439,7 @@ print("sin(b): ", np.round(np.sin(b), 3))
 
 M = np.array([[1,2,3],[4,5,6],[7,8,9]])
 print("\\nMatrix M:\\n", M)
-print("Tranpose:\\n", M.T)
+print("Transpose:\\n", M.T)
 print("Row sums:", M.sum(axis=1))
 print("Col means:", M.mean(axis=0))
 
@@ -468,7 +468,7 @@ axes[0,0].plot(x, np.sin(x), color='#8EB69B', lw=2, label='sin')
 axes[0,0].plot(x, np.cos(x), color='#DAF1DE', lw=2, label='cos')
 axes[0,0].plot(x, np.sin(2*x), color='#235347', lw=1.5, ls='--', label='sin(2x)')
 axes[0,0].legend(facecolor='#0B2B26', edgecolor='#163832', labelcolor='#DAF1DE')
-axes[0,0].set_title('Trig Function', color='#DAF1DE')
+axes[0,0].set_title('Trig Functions', color='#DAF1DE')
 
 data = np.random.normal(0, 1, 1000)
 axes[0,1].hist(data, bins=30, color='#235347', edgecolor='#051F20', alpha=0.85)
@@ -479,7 +479,7 @@ y2 = x2 * 1.5 + np.random.randn(120) * 0.6
 axes[1,0].scatter(x2, y2, c=np.abs(x2+y2), cmap='Greens', alpha=0.75, s=40)
 axes[1,0].set_title('Scatter Plot', color='#DAF1DE')
 
-langs = ['Pyhton', 'JS', 'Rust', 'Go', 'C++']
+langs = ['Python', 'JS', 'Rust', 'Go', 'C++']
 pops = [85, 78, 55, 60, 65]
 axes[1,1].bar(langs, pops, color=['#8EB69B', '#DAF1DE', '#235347', '#163832', '#0B2B26'])
 axes[1,1].set_title('Language Popularity', color='#DAF1DE')
@@ -550,10 +550,17 @@ function injectLogo() {
         'position:relative', 'z-index:1', 'border-radius:4px',
         'display:block',
     ].join(';');
+
     //fall back if the file is not there
-    img.onerror = () => img.remove();
+    img.onerror = () => {
+        img.remove();
+        const fallback = document.createElement('span');
+        fallback.textContent = '🐍';
+        const glow = brandMarkEl.querySelector('.brand-glow');
+        brandMarkEl.insertBefore(fallback, glow || null);
+    };
     const glow = brandMarkEl.querySelector('.brand-glow');
-    brandMarkEl.insertBefore(img, glow || null);
+    brandMarkEl.insertBefore(img, glow || null)
 }
 
 //custom example dropdown
@@ -909,7 +916,7 @@ async function installPackage() {
     setTimeout(() => { pkgStatus.textContent = ''; }, 4000);
 }
 
-async function resetEvn() {
+async function resetEnv() {
     if (!pyodide || isRunning) return;
     setStatus('Resetting...', 'warn');
     await pyodide.runPythonAsync(`
@@ -956,13 +963,7 @@ editor.addEventListener('keydown', (e) => {
         editor.value = text.slice(0, s) + '    ' + text.slice(end);
         editor.selectionStart = editor.selectionEnd = s + 4;
         renderLineNumbers();
-        return;
-    }
-
-    // shift+enter(run code)
-    if (e.shiftKey && e.key === 'Enter') {
-        e.preventDefault();
-        runCode();
+        requestAnimationFrame(scrollCursorIntoView);
         return;
     }
 
@@ -974,7 +975,7 @@ editor.addEventListener('keydown', (e) => {
     }
 
     //ctrl+L(select line)
-    if((e.ctrlKey || e.metaKey) && e.key === '1'){
+    if((e.ctrlKey || e.metaKey) && e.key === 'l'){
         e.preventDefault();
         selectCurrentLine();
         return;
@@ -1046,10 +1047,11 @@ editor.addEventListener('keydown', (e) => {
 
         //expand
         if((before === '{' && after === '}') || (before === '(' && after === ')')) {
-            const inner = '\n' + base + '   \n' + base;
+            const inner = '\n' + base + '    \n' + base;
             editor.value = text.slice(0, start) + inner + text.slice(end);
             editor.selectionStart = editor.selectionEnd = start + base.length + 5;
             renderLineNumbers();
+            scrollCursorIntoView();
             return;
         }
         let newLine = '\n' + base;
@@ -1058,8 +1060,27 @@ editor.addEventListener('keydown', (e) => {
         editor.value = text.slice(0, start) + newLine + text.slice(end);
         editor.selectionStart = editor.selectionEnd = start + newLine.length;
         renderLineNumbers();
+        scrollCursorIntoView();
     }
 });
+
+function scrollCursorIntoView(){
+    requestAnimationFrame(() => {
+        const pos = editor.selectionStart;
+        const textToCursor = editor.value.slice(0, pos);
+        const lineNum = textToCursor.split('\n').length;
+        const lineHeight = parseFloat(getComputedStyle(editor).lineHeight) || 23.8;
+        const paddingTop = parseFloat(getComputedStyle(editor).paddingTop) || 16;
+        const cursorTop = paddingTop + (lineNum - 1) * lineHeight;
+        const cursorBottom = cursorTop + lineHeight;
+
+        if(cursorBottom > editor.scrollTop + editor.clientHeight - paddingTop){
+            editor.scrollTop = cursorBottom - editor.clientHeight + lineHeight * 2;
+        } else if (cursorTop < editor.scrollTop + paddingTop){
+            editor.scrollTop = cursorTop - paddingTop;
+        }
+    });
+}
 
 //button listner
 runBtn.addEventListener('click', runCode);
@@ -1070,7 +1091,7 @@ clearBtn.addEventListener('click', () => {
     execTimeEl.style.display = 'none';
     setStatus('Cleared.');
 });
-resetBtn.addEventListener('click', resetEvn);
+resetBtn.addEventListener('click', resetEnv);
 pkgBtn.addEventListener('click', installPackage);
 pkgInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') installPackage(); });
 
@@ -1161,7 +1182,7 @@ const PY_INTEL = [
     { label: 'type()', detail: 'Get type of object', kind: 'function' },
     { label: 'isinstance()', detail: 'Check instance type', kind: 'function' },
     { label: 'enumerate()', detail: 'Enumerate iterable', kind: 'function' },
-    { label: 'zip()', detail: 'Zip itetables together', kind: 'function' },
+    { label: 'zip()', detail: 'Zip iterables together', kind: 'function' },
     { label: 'map()', detail: 'Apply function to iterable', kind: 'function' },
     { label: 'filter()', detail: 'Filter iterable', kind: 'function' },
     { label: 'sorted()', detail: 'Return sorted list', kind: 'function' },
@@ -1261,7 +1282,7 @@ function positionPopupAtCursor(){
     let top = editorRect.top + paddingTop + (lineNum + 1) * lineHeight - editor.scrollTop;
     let left = editorRect.left + paddingLeft + colNum * charWidth;
 
-    if (left + 340 > window.innerHeight - 10) left = window.innerWidth - 350;
+    if (left + 340 > window.innerWidth - 10) left = window.innerWidth - 350;
     if (top + 220 > window.innerHeight - 10) top = top - 220 - lineHeight;
 
     isPopup.style.top = top + 'px';
@@ -1282,7 +1303,7 @@ function showISPopup(suggestions){
                 <span class="is-label">${escHtml(s.label)}</span>
                 <span class="is-detail">${escHtml(s.detail)}</span>
             </div>`).join('')}
-        <div class="is-popup-footer">Click to insert & Ecs to close</div>`;
+        <div class="is-popup-footer">Click to insert & Esc to close</div>`;
     
         isPopup.querySelectorAll('.is-item').forEach((el, i) => {
             el.addEventListener('click', () => {
@@ -1383,6 +1404,15 @@ function selectNextOccurrence(){
     if(idx === -1) return;
     editor.selectionStart = idx;
     editor.selectionEnd = idx + word.length;
+}
+
+function selectCurrentLine(){
+    const text = editor.value;
+    const start = editor.selectionStart;
+    const lstart = text.lastIndexOf('\n', start - 1) + 1;
+    const lend = text.indexOf('\n', start);
+    editor.selectionStart = lstart;
+    editor.selectionEnd = lend === -1 ? text.length : lend;
 }
 
 initPyodide();

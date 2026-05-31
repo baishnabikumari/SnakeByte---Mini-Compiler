@@ -318,16 +318,25 @@ function injectCSS() {
             position: absolute;
             inset:0;
             margin:0;
-            overflow:hidden;
+            overflow:scroll;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
             white-space: pre;
             font: inherit;
-            line-height:none;
+            line-height:inherit;
             border:none;
             background:transparent;
             z-index:0;
             tab-size:4;
             -moz-tab-size:4;
             color:var(--hl-b);
+            box-sizing:border-box;
+            pointer-events:none;
+            word-break:normal;
+            overflow-wrap:normal;
+        }
+        #sb-hl-pre::-webkit-scrollbar{
+            display:none;    
         }
         
         #editor{
@@ -452,10 +461,16 @@ function setupOverlay() {
 
     const syncFont = () => {
         const cs = window.getComputedStyle(editor);
-        ['fontFamily', 'fontSize', 'fontWeight', 'letterSpacing', 'lineHeight', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'].forEach(p => {
+        [
+            'fontFamily', 'fontSize', 'fontWeight', 'letterSpacing', 'lineHeight', 'paddingTop', 'wordSpacing', 'textIndent', 'textTransform', 'paddingRight', 'paddingBottom', 'paddingLeft', 'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth', 'boxSizing',
+        ].forEach(p => {
             hlPre.style[p] = cs[p];
         });
         hlPre.style.tabSize = '4';
+        hlPre.style.MozTabSize = '4';
+        hlPre.style.whiteSpace = 'pre';
+        hlPre.style.wordBreak = 'normal';
+        hlPre.style.overflowWrap = 'normal';
     };
     syncFont();
 
@@ -506,7 +521,9 @@ function applySyntaxTheme(key) {
     r.style.setProperty('--hl-d', syn.decorator);
     r.style.setProperty('--hl-o', syn.operator);
     r.style.setProperty('--sb-caret', syn.caret);
-    r.style.setProperty('--sb-editor-bg', t.swatch);
+    if(isLight){
+        r.style.removeProperty('--sb-editor-bg');
+    }
 
     document.querySelectorAll('.sb-tp-item').forEach(el => {
         el.classList.toggle('active', el.dataset.theme === key);
