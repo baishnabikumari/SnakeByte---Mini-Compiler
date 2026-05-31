@@ -166,11 +166,13 @@ there are many Shortcuts see below -
 
 
 There are levels in each percentage's so it is like -
-at 10%  → Fetching the pyodide runtime (Cpython 3.11).
-   55%  → Loading the standard library.
-   75%  → Setting up miropip.
-   90%  → Configuring environment.
-   100% → Ready !!!
+| Progress | Status |
+|----------|--------|
+| 10% | `Fetching the pyodide runtime (Cpython 3.11).` |
+| 55% | `Loading the standard library.` |
+| 75% | `Setting up miropip.` |
+| 90% | `Configuring environment.` |
+| 100% | `Ready !!!` |
 
 On completion the boot splash fades out with a scale-up exit animation, and The RUN botton is get enabled.
 
